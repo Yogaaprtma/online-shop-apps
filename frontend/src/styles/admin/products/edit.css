@@ -1,0 +1,322 @@
+/* src/pages/admin/Products/EditProductAdmin.css */
+
+/* Variabel dan Impor (jika ada, seperti dari DetailProductAdmin.css) */
+/* Anda bisa mengimpor variabel dari file CSS global atau mendefinisikannya di sini */
+/* Untuk konsistensi, gunakan variabel yang mirip dengan DetailProductAdmin.css jika memungkinkan */
+:root {
+  --admin-primary-color: #3498db;
+  --admin-secondary-color: #7f8c8d;
+  --admin-success-color: #2ecc71;
+  --admin-danger-color: #e74c3c;
+  --admin-warning-color: #f39c12;
+  --admin-light-gray: #ecf0f1;
+  --admin-medium-gray: #bdc3c7;
+  --admin-dark-gray: #34495e;
+  --admin-text-color: #2c3e50;
+  --admin-card-bg: #ffffff;
+  --admin-body-bg: #f4f7f9;
+  --admin-border-radius: 8px;
+  --admin-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --admin-font-family: 'Roboto', 'Segoe UI', sans-serif;
+  --admin-input-border-color: #ced4da;
+  --admin-input-focus-border-color: #80bdff;
+  --admin-input-focus-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  --admin-invalid-color: var(--admin-danger-color);
+  --admin-invalid-border-color: var(--admin-danger-color);
+}
+
+/* Menggunakan style dasar dari DetailProductAdmin.css jika relevan */
+/* Contoh: .admin-page-container, .admin-breadcrumb, .admin-content-header, .btn, .card, .alert */
+/* Anda bisa @import DetailProductAdmin.css jika ingin mewarisi beberapa style umum */
+/* atau copy-paste style umum yang relevan */
+
+.admin-page-container {
+  max-width: 900px; /* Lebih sempit untuk form */
+  margin: 0 auto;
+  padding: 25px;
+  font-family: var(--admin-font-family);
+  background-color: var(--admin-body-bg);
+  min-height: 100vh;
+}
+
+.admin-breadcrumb {
+  margin-bottom: 25px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--admin-light-gray);
+}
+.admin-breadcrumb ol { list-style: none; padding: 0; margin: 0; display: flex; align-items: center; flex-wrap: wrap; }
+.admin-breadcrumb li { font-size: 0.9rem; color: var(--admin-secondary-color); }
+.admin-breadcrumb li a { color: var(--admin-primary-color); text-decoration: none; transition: color 0.2s ease; }
+.admin-breadcrumb li a:hover { color: var(--admin-dark-gray); text-decoration: underline; }
+.admin-breadcrumb li + li::before { content: "/"; margin: 0 10px; color: var(--admin-medium-gray); }
+.admin-breadcrumb li[aria-current="page"] { font-weight: 500; color: var(--admin-text-color); }
+
+.admin-content-header {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--admin-light-gray);
+}
+.admin-content-header h1 {
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: var(--admin-dark-gray);
+  margin: 0;
+}
+.admin-content-header .product-name-header {
+  color: var(--admin-primary-color);
+  font-weight: normal;
+}
+
+.edit-product-form.card {
+  box-shadow: var(--admin-box-shadow);
+  border: none; /* Hapus border default jika shadow sudah cukup */
+}
+
+.edit-product-form .card-body {
+  padding: 25px 30px;
+}
+.edit-product-form .card-footer {
+  background-color: #f9fafb;
+  padding: 15px 30px;
+  border-top: 1px solid var(--admin-light-gray);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Jarak antar kolom jika ada */
+  margin-bottom: 20px;
+}
+.form-row:last-child {
+  margin-bottom: 0;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  flex-grow: 1; /* Agar grup mengisi ruang jika dalam flex-row */
+}
+.form-group.column-half {
+  flex-basis: calc(50% - 10px); /* 2 kolom dengan gap */
+}
+
+.form-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--admin-text-color);
+  font-size: 0.9rem;
+}
+.required-asterisk {
+  color: var(--admin-danger-color);
+  margin-left: 2px;
+}
+
+.form-control,
+.form-control-file {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--admin-text-color);
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid var(--admin-input-border-color);
+  border-radius: var(--admin-border-radius);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.form-control:focus {
+  color: var(--admin-text-color);
+  background-color: #fff;
+  border-color: var(--admin-input-focus-border-color);
+  outline: 0;
+  box-shadow: var(--admin-input-focus-box-shadow);
+}
+textarea.form-control {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.input-group {
+  display: flex;
+  position: relative;
+}
+.input-group .form-control {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.input-group-text {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--admin-secondary-color);
+  text-align: center;
+  white-space: nowrap;
+  background-color: var(--admin-light-gray);
+  border: 1px solid var(--admin-input-border-color);
+  border-right: none;
+  border-radius: var(--admin-border-radius) 0 0 var(--admin-border-radius);
+}
+
+/* Image Upload & Preview */
+.image-upload-wrapper .form-control-file {
+  margin-bottom: 8px;
+}
+.form-text.text-muted {
+  font-size: 0.8rem;
+  color: var(--admin-secondary-color);
+}
+.image-preview-wrapper {
+  margin-top: 15px;
+  position: relative;
+  display: inline-block; /* Agar tombol remove pas */
+  border: 1px solid var(--admin-light-gray);
+  padding: 5px;
+  background-color: #fff;
+  border-radius: var(--admin-border-radius);
+}
+.image-preview-admin {
+  max-width: 250px;
+  max-height: 250px;
+  display: block;
+  border-radius: calc(var(--admin-border-radius) - 5px);
+  object-fit: cover;
+}
+.btn-remove-image {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: var(--admin-danger-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: background-color 0.2s ease;
+}
+.btn-remove-image:hover {
+  background-color: darken(var(--admin-danger-color), 10%);
+}
+.btn-remove-image i, .btn-remove-image svg {
+  font-size: 0.9em; /* Sesuaikan jika ikon SVG */
+  margin: 0;
+}
+
+
+/* Validation Feedback */
+.is-invalid {
+  border-color: var(--admin-invalid-border-color) !important;
+}
+.is-invalid:focus {
+  box-shadow: 0 0 0 0.2rem rgba(var(--admin-invalid-rgb, 220, 53, 69), 0.25); /* Gunakan RGB dari warna danger */
+}
+.invalid-feedback {
+  display: block; /* Selalu tampil jika ada error */
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  color: var(--admin-invalid-color);
+}
+.d-block { display: block !important; } /* Helper jika feedback tidak tampil */
+
+/* Tombol */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: var(--admin-border-radius);
+  border: 1px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+.btn i, .btn svg { margin-right: 8px; }
+
+.btn-primary { background-color: var(--admin-primary-color); color: white; }
+.btn-primary:hover { background-color: darken(var(--admin-primary-color), 8%); }
+.btn-primary:disabled { background-color: lighten(var(--admin-primary-color), 20%); cursor: not-allowed; }
+
+.btn-outline-secondary { background-color: transparent; color: var(--admin-secondary-color); border-color: var(--admin-medium-gray); }
+.btn-outline-secondary:hover { background-color: var(--admin-light-gray); color: var(--admin-dark-gray); }
+.btn-outline-secondary:disabled { color: lighten(var(--admin-secondary-color), 20%); border-color: lighten(var(--admin-medium-gray), 10%); cursor: not-allowed; }
+
+
+.spinner-btn {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  border: .2em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spinner-border .75s linear infinite;
+  margin-right: 0.5em;
+}
+@keyframes spinner-border {
+  to { transform: rotate(360deg); }
+}
+
+/* Alert Messages */
+.alert {
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: var(--admin-border-radius);
+  font-size: 0.95rem;
+}
+.alert.main-submit-error { /* Untuk error submit utama di atas form */
+  margin-top: 20px;
+}
+.alert-danger { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+.alert-success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
+.alert-warning { color: #856404; background-color: #fff3cd; border-color: #ffeeba; }
+
+
+/* Loading Fullscreen */
+.loading-fullscreen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 70vh; text-align: center; padding: 20px; }
+.loading-fullscreen .spinner { border: 6px solid var(--admin-light-gray); border-top: 6px solid var(--admin-primary-color); border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+.loading-fullscreen p { font-size: 1.1rem; color: var(--admin-secondary-color); }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+
+/* Responsivitas */
+@media (max-width: 768px) {
+  .admin-page-container {
+    padding: 15px;
+  }
+  .admin-content-header h1 {
+    font-size: 1.5rem;
+  }
+  .edit-product-form .card-body,
+  .edit-product-form .card-footer {
+    padding: 20px;
+  }
+  .form-group.column-half {
+    flex-basis: 100%; /* Jadi 1 kolom di mobile */
+  }
+  .form-row {
+    gap: 0; /* Hapus gap jika semua jadi 1 kolom */
+  }
+   .edit-product-form .card-footer {
+    flex-direction: column; /* Tombol jadi full width & stack */
+    gap: 10px;
+  }
+  .edit-product-form .card-footer .btn {
+    width: 100%;
+  }
+}

@@ -1,0 +1,262 @@
+/* src/styles/admin/reports/ReportsPage.css */
+
+/* Variabel dan style dasar (konsisten dengan CSS admin lainnya) */
+:root {
+  --admin-primary-color: #6366F1; /* Sesuaikan dengan tema dashboard Anda */
+  --admin-secondary-color: #10B981;
+  --admin-text-color: #0F172A;
+  --admin-text-light: #64748B;
+  --admin-bg-light: #F8FAFC;
+  --admin-border-color: #E2E8F0;
+  --admin-card-bg: #FFFFFF;
+  --admin-border-radius: 0.75rem; /* 12px */
+  --admin-shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.05);
+  --admin-shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -2px rgba(0,0,0,0.04);
+  --admin-font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  --navbar-height: 70px; /* PENTING: Sesuaikan dengan tinggi navbar Anda */
+}
+
+.admin-reports-page { /* Jika ini adalah kontainer utama */
+    padding-top: calc(var(--navbar-height) + 25px);
+}
+
+
+/* Breadcrumb & Header (Konsisten) */
+.admin-reports-page .admin-breadcrumb { margin-bottom: 25px; }
+.admin-reports-page .admin-breadcrumb ol { list-style: none; padding: 0; margin: 0; display: flex; align-items: center; flex-wrap: wrap; background-color: var(--admin-card-bg); padding: 12px 18px; border-radius: var(--admin-border-radius); box-shadow: var(--admin-shadow-md); border: 1px solid var(--admin-border-color); }
+.admin-reports-page .admin-breadcrumb li { font-size: 0.9rem; color: var(--admin-text-light); }
+.admin-reports-page .admin-breadcrumb li a { color: var(--admin-primary-color); text-decoration: none; font-weight: 500; }
+.admin-reports-page .admin-breadcrumb li a:hover { text-decoration: underline; }
+.admin-reports-page .admin-breadcrumb li + li::before { content: "/"; margin: 0 10px; color: var(--admin-border-color); }
+.admin-reports-page .admin-breadcrumb li[aria-current="page"] { font-weight: 500; color: var(--admin-text-color); }
+
+.admin-reports-page .admin-content-header.reports-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--admin-border-color);
+}
+.admin-reports-page .admin-content-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--admin-text-color);
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.admin-reports-page .admin-content-header .header-icon {
+  margin-right: 12px;
+  color: var(--admin-primary-color);
+  font-size: 1.8rem;
+}
+.admin-reports-page .page-subtitle {
+  font-size: 1.1rem;
+  color: var(--admin-text-light);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Seksi Laporan */
+.admin-reports-page .report-section.card {
+  margin-bottom: 30px;
+  box-shadow: var(--admin-shadow-lg);
+  border: none; /* Kartu sudah memiliki shadow yang cukup */
+  animation: fadeInUpReport 0.6s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+@keyframes fadeInUpReport {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.admin-reports-page .report-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 1.25rem 1.5rem;
+  background-color: var(--admin-bg-light);
+}
+.admin-reports-page .report-card-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--admin-text-color);
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+.admin-reports-page .report-card-header h3 i {
+  margin-right: 10px;
+  color: var(--admin-primary-color);
+}
+.admin-reports-page .report-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.admin-reports-page .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.6rem 1.2rem; font-size: 0.875rem; font-weight: 500; border-radius: var(--admin-border-radius); text-decoration: none; cursor: pointer; transition: all 0.2s ease-in-out; }
+.admin-reports-page .btn i { margin-right: 6px; }
+.admin-reports-page .btn-outline-danger { color: var(--admin-danger-color); border: 1px solid var(--admin-danger-color); background-color: transparent; padding: 8px 15px; font-weight: 500;}
+.admin-reports-page .btn-outline-danger:hover { background-color: var(--admin-danger-color); color: white; }
+.admin-reports-page .btn-outline-success { color: var(--admin-success-color); border: 1px solid var(--admin-success-color); background-color: transparent; padding: 8px 15px; font-weight: 500;}
+.admin-reports-page .btn-outline-success:hover { background-color: var(--admin-success-color); color: white; }
+
+.admin-reports-page .btn-outline-danger i,
+.admin-reports-page .btn-outline-success i {
+    font-size: 0.9em; /* Ukuran ikon di tombol */
+}
+
+/* Ringkasan Umum */
+.admin-reports-page .summary-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px; /* Jarak antar kartu */
+  padding: 0; /* Hapus padding default section jika kartu sudah punya padding */
+  background-color: transparent;
+  box-shadow: none;
+  border: none;
+  margin-bottom: 30px; /* Jarak ke seksi berikutnya */
+}
+
+.admin-reports-page .summary-card {
+  background-color: var(--admin-card-bg);
+  padding: 20px; /* Padding konsisten */
+  border-radius: var(--admin-border-radius);
+  box-shadow: var(--admin-shadow-md);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column; /* Tata ikon, judul, dan nilai secara vertikal */
+  align-items: flex-start; /* Rata kiri */
+  gap: 10px; /* Jarak antar elemen di dalam kartu */
+  min-height: 120px; /* Beri tinggi minimal agar seragam */
+}
+
+.admin-reports-page .summary-card:hover {
+  transform: translateY(-5px) scale(1.02); /* Animasi hover lebih halus */
+  box-shadow: var(--admin-shadow-lg);
+}
+
+.admin-reports-page .summary-icon {
+  font-size: 1.8rem; /* Ukuran ikon sedikit disesuaikan */
+  padding: 12px; /* Padding ikon disesuaikan */
+  border-radius: var(--admin-border-radius); /* Radius ikon sama dengan kartu */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px; /* Ukuran kontainer ikon */
+  height: 50px;
+  margin-bottom: 8px; /* Jarak ikon ke judul */
+}
+
+.admin-reports-page .summary-icon.revenue { background-color: var(--admin-primary-color); }
+.admin-reports-page .summary-icon.orders { background-color: var(--admin-warning-color); }
+.admin-reports-page .summary-icon.products { background-color: var(--admin-info-color); }
+.admin-reports-page .summary-icon.users { background-color: var(--admin-secondary-color); }
+
+.admin-reports-page .summary-card h4 {
+  font-size: 0.85rem; /* Ukuran font judul statistik */
+  font-weight: 600; /* Lebih tebal */
+  color: var(--admin-text-light);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.admin-reports-page .summary-card p {
+  font-size: 1.6rem; /* Ukuran angka statistik */
+  font-weight: 700;
+  color: var(--admin-text-color);
+  margin: 0;
+  line-height: 1.2; /* Jaga agar tidak terlalu tinggi */
+}
+
+/* Grafik Penjualan */
+.admin-reports-page .report-chart-container {
+  height: 350px; /* Tinggi grafik */
+  padding: 15px 10px 10px 5px; /* Beri sedikit padding agar tidak terlalu mepet */
+  position: relative; 
+  animation: chartFadeIn 1s ease-out;
+}
+
+@keyframes chartFadeIn {
+  from { opacity: 0.3; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Tabel Produk Populer */
+.admin-reports-page .table-responsive-reports {
+  overflow-x: auto;
+  margin-top: 10px;
+}
+.admin-reports-page .admin-table.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.admin-reports-page .admin-table.report-table th,
+.admin-reports-page .admin-table.report-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--admin-border-color);
+}
+.admin-reports-page .admin-table.report-table thead th {
+  background-color: var(--admin-bg-light);
+  font-weight: 600;
+  color: var(--admin-text-light);
+}
+.admin-reports-page .admin-table.report-table tbody tr {
+  transition: background-color 0.2s ease; /* Transisi hover lebih halus */
+}
+.admin-reports-page .admin-table.report-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+.admin-reports-page .admin-table.report-table .text-right { text-align: right; }
+.admin-reports-page .admin-table.report-table .text-center { text-align: center; }
+.admin-reports-page .admin-table.report-table a {
+  color: var(--admin-primary-color);
+  font-weight: 500;
+}
+.admin-reports-page .admin-table.report-table a:hover {
+  text-decoration: underline;
+}
+.admin-reports-page .no-data-message {
+  padding: 20px;
+  text-align: center;
+  color: var(--admin-text-light);
+}
+
+
+/* Loading & Alert Fullscreen */
+.admin-reports-page .loading-fullscreen, 
+.admin-reports-page .alert.full-page-alert {
+  min-height: calc(100vh - var(--navbar-height) - 150px); 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+/* ... (copy spinner, alert style dari CSS admin lain jika perlu) ... */
+.admin-reports-page .loading-fullscreen .spinner { border: 6px solid var(--admin-light-gray, #ecf0f1); border-top: 6px solid var(--admin-primary-color); border-radius: 50%; width: 50px; height: 50px; animation: spin-reports 1s linear infinite; margin-bottom: 20px; }
+.admin-reports-page .loading-fullscreen p { font-size: 1.1rem; color: var(--admin-text-light, #7f8c8d); }
+@keyframes spin-reports { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.admin-reports-page .alert { padding: 15px 20px; margin-bottom: 20px; border: 1px solid transparent; border-radius: var(--admin-border-radius); }
+.admin-reports-page .alert-danger { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+
+
+/* Animasi untuk kartu laporan */
+.admin-reports-page .animated-card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUpCard 0.5s ease-out forwards;
+}
+
+@keyframes fadeInUpCard {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,88 @@
+/* src/styles/admin/users/AddEditUserAdmin.css */
+/* (Gunakan variabel dan style dasar dari UserList.css atau CSS admin global Anda) */
+:root {
+  --admin-primary-color: #3498db; /* ... dan variabel lainnya ... */
+  --admin-body-bg: #f4f7f9;
+  --admin-card-bg: #ffffff;
+  --admin-border-radius: 8px;
+  --admin-box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+  --admin-font-family: 'Roboto', 'Segoe UI', sans-serif;
+  --admin-input-border-color: #ced4da;
+  --admin-input-focus-border-color: #80bdff;
+  --admin-input-focus-box-shadow: 0 0 0 0.2rem rgba(52,152,219,0.25);
+  --admin-invalid-color: #e74c3c;
+  --admin-invalid-border-color: #e74c3c;
+  --navbar-height: 70px;
+}
+
+.admin-user-form-page .admin-page-container { /* Atau .admin-user-form-page jika itu container utama */
+     padding-top: calc(var(--navbar-height) + 25px);
+}
+
+.admin-user-form-page .admin-breadcrumb { margin-bottom: 25px; /* Style breadcrumb sama */ }
+.admin-user-form-page .admin-breadcrumb ol { list-style: none; padding: 0; margin: 0; display: flex; align-items: center; flex-wrap: wrap; background-color: var(--admin-card-bg); padding: 10px 15px; border-radius: var(--admin-border-radius); box-shadow: var(--admin-box-shadow); border: 1px solid var(--admin-light-gray, #ecf0f1); }
+.admin-user-form-page .admin-breadcrumb li { font-size: 0.9rem; color: var(--admin-secondary-color, #7f8c8d); }
+.admin-user-form-page .admin-breadcrumb li a { color: var(--admin-primary-color); text-decoration: none; }
+.admin-user-form-page .admin-breadcrumb li a:hover { text-decoration: underline; }
+.admin-user-form-page .admin-breadcrumb li + li::before { content: "/"; margin: 0 10px; color: var(--admin-medium-gray, #bdc3c7); }
+.admin-user-form-page .admin-breadcrumb li[aria-current="page"] { font-weight: 500; color: var(--admin-text-color, #2c3e50); }
+
+
+.admin-user-form-page .admin-content-header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--admin-light-gray, #ecf0f1); }
+.admin-user-form-page .admin-content-header h1 { font-size: 1.7rem; font-weight: 600; color: var(--admin-dark-gray, #34495e); margin: 0; }
+.admin-user-form-page .admin-content-header .product-name-header { color: var(--admin-primary-color); font-weight: normal; }
+
+
+.admin-user-form-page .user-form.card { box-shadow: var(--admin-box-shadow); border: 1px solid var(--admin-light-gray, #ecf0f1 ); }
+.admin-user-form-page .user-form .card-body { padding: 25px 30px; }
+.admin-user-form-page .user-form .card-footer { background-color: #f9fafb; padding: 15px 30px; border-top: 1px solid var(--admin-light-gray, #ecf0f1 ); display: flex; justify-content: flex-end; gap: 10px; }
+
+.admin-user-form-page .form-section-columns {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+@media (min-width: 768px) {
+    .admin-user-form-page .form-section-columns {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+.admin-user-form-page .form-column .form-section-title { font-size: 1.1rem; font-weight: 600; color: var(--admin-dark-gray, #34495e); margin-top: 0; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 1px solid var(--admin-medium-gray, #bdc3c7); }
+
+.admin-user-form-page .form-group { margin-bottom: 20px; }
+.admin-user-form-page .form-group label { display: block; font-weight: 500; margin-bottom: 8px; color: var(--admin-text-color, #2c3e50); font-size: 0.9rem; }
+.admin-user-form-page .required-asterisk { color: var(--admin-danger-color, #e74c3c); margin-left: 2px; }
+
+.admin-user-form-page .form-control { display: block; width: 100%; padding: 10px 12px; font-size: 0.95rem; line-height: 1.5; color: var(--admin-text-color, #2c3e50); background-color: #fff; border: 1px solid var(--admin-input-border-color); border-radius: var(--admin-border-radius); transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; }
+.admin-user-form-page .form-control:focus { border-color: var(--admin-input-focus-border-color); outline: 0; box-shadow: var(--admin-input-focus-box-shadow); }
+.admin-user-form-page textarea.form-control { min-height: 80px; resize: vertical; }
+.admin-user-form-page .form-control.price-input { padding-left: 35px; } /* Jika ada prefix Rp */
+.admin-user-form-page .input-group { display: flex; position: relative; }
+.admin-user-form-page .input-group .form-control { border-top-left-radius: 0; border-bottom-left-radius: 0; flex-grow: 1; }
+.admin-user-form-page .input-group-text { display: flex; align-items: center; padding: 10px 12px; color: var(--admin-secondary-color, #7f8c8d); background-color: var(--admin-light-gray, #ecf0f1); border: 1px solid var(--admin-input-border-color); border-right: none; border-radius: var(--admin-border-radius) 0 0 var(--admin-border-radius); }
+
+.admin-user-form-page .is-invalid { border-color: var(--admin-invalid-border-color) !important; }
+.admin-user-form-page .is-invalid:focus { box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); }
+.admin-user-form-page .invalid-feedback { display: block; width: 100%; margin-top: 0.25rem; font-size: 0.8rem; color: var(--admin-invalid-color); }
+
+.admin-user-form-page .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; font-size: 0.95rem; font-weight: 500; border-radius: var(--admin-border-radius); border: 1px solid transparent; text-decoration: none; cursor: pointer; transition: all 0.2s ease-in-out; }
+.admin-user-form-page .btn i { margin-right: 8px; }
+.admin-user-form-page .btn-primary { background-color: var(--admin-primary-color); color: white; }
+.admin-user-form-page .btn-primary:hover { background-color: darken(var(--admin-primary-color), 8%); }
+.admin-user-form-page .btn-primary:disabled { background-color: lighten(var(--admin-primary-color), 20%); cursor: not-allowed; }
+.admin-user-form-page .btn-outline-secondary { background-color: transparent; color: var(--admin-secondary-color, #7f8c8d); border-color: var(--admin-medium-gray, #bdc3c7); }
+.admin-user-form-page .btn-outline-secondary:hover { background-color: var(--admin-light-gray, #ecf0f1); color: var(--admin-dark-gray, #34495e); }
+.admin-user-form-page .btn-outline-secondary:disabled { opacity: 0.65; cursor: not-allowed; }
+
+.admin-user-form-page .spinner-btn { display: inline-block; width: 1em; height: 1em; vertical-align: -0.125em; border: .2em solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spinner-border .75s linear infinite; margin-right: 0.5em; }
+@keyframes spinner-border { to { transform: rotate(360deg); } }
+
+.admin-user-form-page .alert { padding: 15px 20px; margin-bottom: 20px; border: 1px solid transparent; border-radius: var(--admin-border-radius); font-size: 0.95rem; }
+.admin-user-form-page .alert.main-submit-error { margin-bottom: 20px; } /* Khusus untuk error submit utama */
+.admin-user-form-page .alert-danger { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+.admin-user-form-page .alert-success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
+
+.admin-user-form-page .loading-fullscreen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - var(--navbar-height) - 100px); padding: 20px; }
+.admin-user-form-page .loading-fullscreen .spinner { border: 6px solid var(--admin-light-gray, #ecf0f1); border-top: 6px solid var(--admin-primary-color); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+.admin-user-form-page .loading-fullscreen p { font-size: 1.1rem; color: var(--admin-secondary-color, #7f8c8d); }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }

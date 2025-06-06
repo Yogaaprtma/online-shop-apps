@@ -1,0 +1,145 @@
+/* src/styles/admin/users/UserList.css */
+
+/* Variabel dan style dasar (bisa diimpor atau disalin dari CSS admin lain) */
+/* Pastikan variabel seperti --admin-primary-color, --navbar-height, dll. sudah ada */
+:root {
+  --admin-primary-color: #3498db;
+  --admin-secondary-color: #7f8c8d;
+  --admin-success-color: #2ecc71;
+  --admin-danger-color: #e74c3c;
+  --admin-warning-color: #f39c12;
+  --admin-info-color: #3498DB;
+  --admin-light-gray: #ecf0f1;
+  --admin-medium-gray: #bdc3c7;
+  --admin-dark-gray: #34495e;
+  --admin-text-color: #2c3e50;
+  --admin-card-bg: #ffffff;
+  --admin-body-bg: #f4f7f9;
+  --admin-border-radius: 8px;
+  --admin-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+  --admin-font-family: 'Roboto', 'Segoe UI', sans-serif;
+  --navbar-height: 70px; /* Sesuaikan! */
+}
+
+.admin-user-list-page .admin-page-container { /* Atau .admin-user-list-page jika itu container utama */
+  padding-top: calc(var(--navbar-height) + 25px); /* Memberi ruang untuk navbar */
+}
+
+/* Breadcrumb & Header (Gunakan style umum admin Anda) */
+.admin-user-list-page .admin-breadcrumb { margin-bottom: 25px; }
+.admin-user-list-page .admin-breadcrumb ol { list-style: none; padding: 0; margin: 0; display: flex; align-items: center; flex-wrap: wrap; background-color: var(--admin-card-bg); padding: 10px 15px; border-radius: var(--admin-border-radius); box-shadow: var(--admin-box-shadow); border: 1px solid var(--admin-light-gray); }
+.admin-user-list-page .admin-breadcrumb li { font-size: 0.9rem; color: var(--admin-secondary-color); }
+.admin-user-list-page .admin-breadcrumb li a { color: var(--admin-primary-color); text-decoration: none; }
+.admin-user-list-page .admin-breadcrumb li a:hover { text-decoration: underline; }
+.admin-user-list-page .admin-breadcrumb li + li::before { content: "/"; margin: 0 10px; color: var(--admin-medium-gray); }
+.admin-user-list-page .admin-breadcrumb li[aria-current="page"] { font-weight: 500; color: var(--admin-text-color); }
+
+.admin-user-list-page .admin-content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--admin-light-gray); }
+.admin-user-list-page .admin-content-header h1 { font-size: 1.7rem; font-weight: 600; color: var(--admin-dark-gray); margin: 0; }
+
+/* Tombol Umum (Gunakan style umum admin Anda) */
+.admin-user-list-page .btn { display: inline-flex; align-items: center; padding: 9px 18px; font-size: 0.9rem; font-weight: 500; border-radius: var(--admin-border-radius); border: 1px solid transparent; text-decoration: none; cursor: pointer; transition: all 0.2s ease-in-out; }
+.admin-user-list-page .btn i { margin-right: 7px; }
+.admin-user-list-page .btn-primary { background-color: var(--admin-primary-color); color: white; border-color: var(--admin-primary-color); }
+.admin-user-list-page .btn-primary:hover { background-color: #2980b9; border-color: #2980b9; }
+
+/* Kontrol: Search & Filter */
+.admin-user-list-page .controls-container.card { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; margin-bottom: 25px; align-items: center; }
+.admin-user-list-page .search-input-admin { position: relative; flex-grow: 1; min-width: 280px; }
+.admin-user-list-page .search-input-admin input { width: 100%; padding: 10px 12px 10px 35px; border: 1px solid var(--admin-medium-gray); border-radius: var(--admin-border-radius); font-size: 0.95rem; }
+.admin-user-list-page .search-input-admin input:focus { border-color: var(--admin-primary-color); box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25); outline: none; }
+.admin-user-list-page .search-icon-admin { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--admin-secondary-color); }
+.admin-user-list-page .filter-role-admin { display: flex; align-items: center; gap: 8px; }
+.admin-user-list-page .filter-role-admin label { font-weight: 500; color: var(--admin-text-color); }
+.admin-user-list-page .form-select-admin { padding: 10px 12px; border: 1px solid var(--admin-medium-gray); border-radius: var(--admin-border-radius); background-color: white; min-width: 180px; }
+
+/* Tabel Pengguna */
+.admin-user-list-page .table-container.card { overflow-x: auto; padding: 0; position: relative; }
+.admin-user-list-page .table-loading-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 255, 255, 0.75); display: flex; align-items: center; justify-content: center; z-index: 10; font-size: 1rem; color: var(--admin-primary-color); }
+.admin-user-list-page .spinner-small { width: 20px; height: 20px; border: 3px solid var(--admin-light-gray); border-top-color: var(--admin-primary-color); border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 10px; }
+
+.admin-user-list-page .admin-table.user-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.admin-user-list-page .admin-table th, .admin-user-list-page .admin-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--admin-light-gray); }
+.admin-user-list-page .admin-table thead th { background-color: #f8f9fa; font-weight: 600; color: var(--admin-dark-gray); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; }
+.admin-user-list-page .admin-table tbody tr:hover { background-color: #f1f3f5; }
+
+/* Animasi untuk baris tabel */
+.admin-user-list-page .table-row-animated {
+  opacity: 0;
+  transform: translateY(15px);
+  animation: fadeInUpRow 0.5s ease-out forwards;
+  animation-delay: calc(0.05s * var(--animation-order)); /* --animation-order dari JSX */
+}
+@keyframes fadeInUpRow {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.admin-user-list-page .address-cell {
+  max-width: 200px; /* Batasi lebar alamat */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: help; /* Tunjukkan bisa di-hover untuk tooltip jika ada */
+}
+
+.admin-user-list-page .role-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: var(--admin-border-radius);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: white;
+}
+.admin-user-list-page .role-admin { background-color: var(--admin-danger-color); }
+.admin-user-list-page .role-user { background-color: var(--admin-success-color); }
+.admin-user-list-page .role-default { background-color: var(--admin-secondary-color); }
+
+.admin-user-list-page .actions-cell { text-align: center; white-space: nowrap; }
+.admin-user-list-page .btn-action { display: inline-flex; align-items: center; background: none; border: none; padding: 6px 10px; margin: 0 3px; cursor: pointer; border-radius: var(--admin-border-radius); transition: background-color 0.2s ease, color 0.2s ease; font-size: 0.85rem; }
+.admin-user-list-page .btn-action i { margin-right: 5px; font-size: 0.9em; }
+.admin-user-list-page .btn-action:hover { background-color: var(--admin-light-gray); }
+.admin-user-list-page .btn-view { color: var(--admin-info-color); }
+.admin-user-list-page .btn-view:hover { color: darken(var(--admin-info-color), 10%); }
+.admin-user-list-page .btn-edit { color: var(--admin-warning-color); }
+.admin-user-list-page .btn-edit:hover { color: darken(var(--admin-warning-color), 10%); }
+.admin-user-list-page .btn-delete { color: var(--admin-danger-color); }
+.admin-user-list-page .btn-delete:hover { color: darken(var(--admin-danger-color), 10%); }
+
+.admin-user-list-page .no-data-cell { text-align: center; padding: 40px; color: var(--admin-secondary-color); font-style: italic; }
+
+/* Pagination (Gunakan style umum pagination admin Anda) */
+.admin-user-list-page .pagination-controls { display: flex; justify-content: center; align-items: center; padding: 20px 0; margin-top: 20px; gap: 10px; }
+.admin-user-list-page .btn-pagination, .admin-user-list-page .btn-page-number { padding: 8px 15px; border: 1px solid var(--admin-medium-gray); background-color: white; color: var(--admin-text-color); border-radius: var(--admin-border-radius); cursor: pointer; transition: all 0.2s ease; }
+.admin-user-list-page .btn-pagination:disabled, .admin-user-list-page .btn-page-number:disabled:not(.active) { opacity: 0.6; cursor: not-allowed; }
+.admin-user-list-page .btn-pagination:hover:not(:disabled), .admin-user-list-page .btn-page-number:hover:not(:disabled):not(.active) { background-color: var(--admin-light-gray); border-color: var(--admin-primary-color); color: var(--admin-primary-color); }
+.admin-user-list-page .btn-page-number.active { background-color: var(--admin-primary-color); color: white; border-color: var(--admin-primary-color); }
+.admin-user-list-page .ellipsis { margin: 0 5px; color: var(--admin-secondary-color); }
+.admin-user-list-page .page-numbers { display: flex; gap: 5px; }
+
+/* Loading & Error Fullscreen (Gunakan style umum admin Anda) */
+.admin-user-list-page .loading-fullscreen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - var(--navbar-height) - 100px); padding: 20px; }
+.admin-user-list-page .loading-fullscreen .spinner { border: 6px solid var(--admin-light-gray); border-top: 6px solid var(--admin-primary-color); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+.admin-user-list-page .loading-fullscreen p { font-size: 1.1rem; color: var(--admin-secondary-color); }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* Responsivitas Tabel */
+@media (max-width: 992px) { /* Ubah breakpoint agar lebih awal */
+  .admin-user-list-page .admin-table thead { display: none; }
+  .admin-user-list-page .admin-table tbody, .admin-user-list-page .admin-table tr, .admin-user-list-page .admin-table td { display: block; width: 100%; }
+  .admin-user-list-page .admin-table tr { margin-bottom: 15px; border: 1px solid var(--admin-medium-gray); border-radius: var(--admin-border-radius); overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+  .admin-user-list-page .admin-table td { text-align: right; padding-left: 45%; position: relative; border-bottom: 1px dotted var(--admin-light-gray); padding-top: 10px; padding-bottom: 10px; }
+  .admin-user-list-page .admin-table td:last-child { border-bottom: none; }
+  .admin-user-list-page .admin-table td::before { content: attr(data-label); position: absolute; left: 15px; width: calc(45% - 30px); padding-right: 10px; font-weight: 600; text-align: left; color: var(--admin-dark-gray); white-space: nowrap; }
+  .admin-user-list-page .actions-cell { text-align: right; }
+  .admin-user-list-page .btn-action-text-hidden-sm { display: none; } /* Sembunyikan teks tombol di mobile */
+  .admin-user-list-page .btn-action i { margin-right: 0; } /* Hapus margin jika hanya ikon */
+}
+@media (max-width: 768px) {
+    .admin-user-list-page .controls-container.card { flex-direction: column; align-items: stretch;}
+    .admin-user-list-page .filter-role-admin { width: 100%;}
+    .admin-user-list-page .form-select-admin { width: 100%;}
+}

@@ -1,0 +1,338 @@
+:root {
+  --admin-primary-color: #3498db;
+  --admin-secondary-color: #7f8c8d;
+  --admin-success-color: #2ecc71;
+  --admin-warning-color: #f39c12;
+  --admin-danger-color: #e74c3c;
+  --admin-info-color: #3498DB; /* Biru info */
+  --admin-light-gray: #ecf0f1;
+  --admin-medium-gray: #bdc3c7;
+  --admin-dark-gray: #34495e;
+  --admin-text-color: #2c3e50;
+  --admin-card-bg: #ffffff;
+  --admin-body-bg: #f4f7f9;
+  --admin-border-radius: 8px;
+  --admin-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --admin-font-family: 'Roboto', 'Segoe UI', sans-serif;
+  --navbar-height: 70px; /* Sesuaikan! */
+}
+
+/* Breadcrumb & Header (Asumsikan style umum admin sudah ada) */
+.admin-orders-page .admin-breadcrumb { margin-bottom: 25px; }
+.admin-orders-page .admin-breadcrumb ol { list-style: none; padding: 0; margin: 0; display: flex; align-items: center; flex-wrap: wrap; background-color: var(--admin-card-bg); padding: 10px 15px; border-radius: var(--admin-border-radius); box-shadow: var(--admin-box-shadow); border: 1px solid var(--admin-light-gray); }
+.admin-orders-page .admin-breadcrumb li { font-size: 0.9rem; color: var(--admin-secondary-color); }
+.admin-orders-page .admin-breadcrumb li a { color: var(--admin-primary-color); text-decoration: none; }
+.admin-orders-page .admin-breadcrumb li a:hover { text-decoration: underline; }
+.admin-orders-page .admin-breadcrumb li + li::before { content: "/"; margin: 0 10px; color: var(--admin-medium-gray); }
+.admin-orders-page .admin-breadcrumb li[aria-current="page"] { font-weight: 500; color: var(--admin-text-color); }
+
+.admin-orders-page .admin-content-header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--admin-light-gray); }
+.admin-orders-page .admin-content-header h1 { font-size: 1.7rem; font-weight: 600; color: var(--admin-dark-gray); margin: 0; }
+
+/* Kontrol: Search & Filter */
+.admin-orders-page .controls-container.card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  margin-bottom: 25px;
+  align-items: center;
+}
+
+.admin-orders-page .search-input-admin {
+  position: relative;
+  flex-grow: 1;
+  min-width: 300px;
+}
+
+.admin-orders-page .search-input-admin input {
+  width: 100%;
+  padding: 10px 12px 10px 35px; /* Padding kiri untuk ikon */
+  border: 1px solid var(--admin-medium-gray);
+  border-radius: var(--admin-border-radius);
+  font-size: 0.95rem;
+}
+.admin-orders-page .search-input-admin input:focus {
+  border-color: var(--admin-primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+  outline: none;
+}
+
+.admin-orders-page .search-icon-admin {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--admin-secondary-color);
+}
+
+.admin-orders-page .filter-status-admin {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.admin-orders-page .filter-status-admin label {
+  font-weight: 500;
+  color: var(--admin-text-color);
+}
+.admin-orders-page .form-select-admin {
+  padding: 10px 12px;
+  border: 1px solid var(--admin-medium-gray);
+  border-radius: var(--admin-border-radius);
+  background-color: white;
+  min-width: 200px;
+}
+
+/* Tabel Pesanan */
+.admin-orders-page .table-container.card {
+  overflow-x: auto; /* Agar tabel bisa di-scroll horizontal di layar kecil */
+  padding: 0; /* Card tidak perlu padding jika tabel sudah punya style sendiri */
+  position: relative; /* Untuk overlay loading */
+}
+
+.admin-orders-page .table-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  font-size: 1rem;
+  color: var(--admin-primary-color);
+}
+.admin-orders-page .spinner-small {
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--admin-light-gray);
+  border-top-color: var(--admin-primary-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: 10px;
+}
+
+.admin-orders-page .admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.admin-orders-page .admin-table th,
+.admin-orders-page .admin-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid var(--admin-light-gray);
+}
+
+.admin-orders-page .admin-table thead th {
+  background-color: #f8f9fa; /* Header tabel sedikit berbeda */
+  font-weight: 600;
+  color: var(--admin-dark-gray);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.admin-orders-page .admin-table tbody tr:hover {
+  background-color: #f1f3f5;
+}
+.admin-orders-page .admin-table td small {
+  display: block;
+  font-size: 0.8em;
+  color: var(--admin-secondary-color);
+  margin-top: 2px;
+}
+
+
+.admin-orders-page .status-pill {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 15px; /* Bentuk pil */
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: white;
+  text-align: center;
+  min-width: 100px;
+}
+
+.admin-orders-page .status-pending { background-color: var(--admin-warning-color); color: var(--admin-dark-gray); }
+.admin-orders-page .status-waiting { background-color: var(--admin-info-color); }
+.admin-orders-page .status-paid { background-color: var(--admin-success-color); }
+.admin-orders-page .status-processing { background-color: #54a0ff; } /* Biru lain untuk proses */
+.admin-orders-page .status-shipped { background-color: #1dd1a1; } /* Hijau toska untuk dikirim */
+.admin-orders-page .status-completed { background-color: var(--admin-secondary-color); }
+.admin-orders-page .status-cancelled { background-color: var(--admin-danger-color); }
+.admin-orders-page .status-default { background-color: var(--admin-medium-gray); color: var(--admin-dark-gray); }
+
+
+.admin-orders-page .actions-cell {
+  text-align: left;
+  white-space: nowrap; /* Agar tombol tidak wrap */
+}
+
+.admin-orders-page .btn-action { /* Kelas baru untuk tombol aksi */
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px; /* Sesuaikan padding */
+  margin: 0 4px;
+  border-radius: var(--admin-border-radius, 6px); /* Gunakan variabel jika ada */
+  font-size: 0.85rem; /* Sesuaikan ukuran font */
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid transparent; /* Border awal transparan */
+}
+
+.admin-orders-page .btn-action-text {
+  margin-left: 6px; /* Jarak antara ikon dan teks */
+}
+
+.admin-orders-page .btn-action.btn-view {
+  background-color: var(--admin-info-color, #3498DB); /* Warna info */
+  color: white;
+  border-color: var(--admin-info-color, #3498DB);
+}
+.admin-orders-page .btn-action.btn-view:hover {
+  background-color: #2980b9; /* Warna info lebih gelap */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.admin-orders-page .btn-action.btn-confirm {
+  background-color: var(--admin-success-color, #2ecc71);
+  color: white;
+  border-color: var(--admin-success-color, #2ecc71);
+}
+.admin-orders-page .btn-action.btn-confirm:hover {
+  background-color: #27ae60; /* Warna sukses lebih gelap */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.admin-orders-page .btn-icon {
+  background: none;
+  border: none;
+  padding: 8px;
+  margin: 0 4px;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+.admin-orders-page .btn-icon i {
+  font-size: 1rem;
+}
+
+.admin-orders-page .btn-icon.btn-view { color: var(--admin-info-color, #3498DB); }
+.admin-orders-page .btn-icon.btn-view:hover { background-color: rgba(52, 152, 219, 0.1); }
+
+.admin-orders-page .btn-icon.btn-confirm { color: var(--admin-success-color, #2ecc71); }
+.admin-orders-page .btn-icon.btn-confirm:hover { background-color: rgba(46, 204, 113, 0.1); }
+
+.admin-orders-page .no-data-cell {
+  text-align: center;
+  padding: 40px;
+  color: var(--admin-secondary-color);
+  font-style: italic;
+}
+
+/* Pagination Controls (Ambil dari Index.jsx admin produk jika sudah ada dan konsisten) */
+.admin-orders-page .pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  margin-top: 20px;
+  gap: 10px;
+}
+.admin-orders-page .btn-pagination, .admin-orders-page .btn-page-number {
+  padding: 8px 15px;
+  border: 1px solid var(--admin-medium-gray);
+  background-color: white;
+  color: var(--admin-text-color);
+  border-radius: var(--admin-border-radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.admin-orders-page .btn-pagination:disabled, .admin-orders-page .btn-page-number:disabled:not(.active) {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.admin-orders-page .btn-pagination:hover:not(:disabled), .admin-orders-page .btn-page-number:hover:not(:disabled):not(.active) {
+  background-color: var(--admin-light-gray);
+  border-color: var(--admin-primary-color);
+  color: var(--admin-primary-color);
+}
+.admin-orders-page .btn-page-number.active {
+  background-color: var(--admin-primary-color);
+  color: white;
+  border-color: var(--admin-primary-color);
+}
+.admin-orders-page .ellipsis { margin: 0 5px; color: var(--admin-secondary-color); }
+.admin-orders-page .page-numbers { display: flex; gap: 5px; }
+
+/* Responsivitas Tabel */
+@media (max-width: 768px) {
+  .admin-orders-page .admin-table thead {
+    display: none; /* Sembunyikan header tabel tradisional */
+  }
+  .admin-orders-page .admin-table tbody,
+  .admin-orders-page .admin-table tr,
+  .admin-orders-page .admin-table td {
+    display: block;
+    width: 100%;
+  }
+  .admin-orders-page .admin-table tr {
+    margin-bottom: 15px;
+    border: 1px solid var(--admin-medium-gray);
+    border-radius: var(--admin-border-radius);
+    overflow: hidden; /* Agar radius card-like terlihat */
+  }
+  .admin-orders-page .admin-table td {
+    text-align: right; /* Data di kanan */
+    padding-left: 50%; /* Ruang untuk label */
+    position: relative;
+    border-bottom: 1px dotted var(--admin-light-gray);
+  }
+  .admin-orders-page .admin-table td:last-child {
+    border-bottom: none;
+  }
+  .admin-orders-page .admin-table td::before {
+    content: attr(data-label); /* Ambil label dari atribut data-label */
+    position: absolute;
+    left: 15px;
+    width: calc(50% - 30px); /* Lebar label */
+    padding-right: 10px;
+    font-weight: 600;
+    text-align: left;
+    color: var(--admin-dark-gray);
+  }
+  .admin-orders-page .actions-cell {
+    text-align: right; /* Pastikan tombol aksi tetap di kanan */
+  }
+  .admin-orders-page .btn-action {
+    padding: 5px 8px; /* Padding lebih kecil di mobile */
+    font-size: 0.8rem;
+  }
+  .admin-orders-page .controls-container.card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .admin-orders-page .filter-status-admin {
+    width: 100%;
+  }
+  .admin-orders-page .form-select-admin {
+    width: 100%;
+  }
+}
+
+/* Loading Fullscreen (jika diperlukan) */
+.admin-orders-page .loading-fullscreen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - var(--navbar-height) - 100px); /* Sesuaikan tinggi */ padding: 20px; }
+.admin-orders-page .loading-fullscreen .spinner { border: 6px solid var(--admin-light-gray); border-top: 6px solid var(--admin-primary-color); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+.admin-orders-page .loading-fullscreen p { font-size: 1.1rem; color: var(--admin-secondary-color); }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }

@@ -1,0 +1,397 @@
+/* src/styles/admin/products/detail.css */
+
+/* --- Variabel Global & Dasar --- */
+:root {
+  /* Variabel yang sudah ada */
+  --admin-primary-color: #3498db; /* Biru yang modern */
+  --admin-secondary-color: #7f8c8d; /* Abu-abu netral */
+  --admin-success-color: #2ecc71;
+  --admin-warning-color: #f39c12;
+  --admin-danger-color: #e74c3c;
+  --admin-light-gray: #ecf0f1;
+  --admin-medium-gray: #bdc3c7;
+  --admin-dark-gray: #34495e;
+  --admin-text-color: #2c3e50;
+  --admin-card-bg: #ffffff;
+  --admin-body-bg: #f4f7f9; /* Latar belakang halaman yang sedikit abu-abu */
+  --admin-border-radius: 8px;
+  --admin-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --admin-font-family: 'Roboto', 'Segoe UI', sans-serif; /* Contoh font modern */
+
+  /* TAMBAHKAN VARIABEL INI: Sesuaikan nilainya dengan tinggi Navbar Anda */
+  --navbar-height: 70px; /* Contoh tinggi Navbar, silakan ganti! */
+}
+
+.admin-page-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  /* Ubah padding di sini:
+    Padding atas sekarang akan memperhitungkan tinggi navbar.
+    Padding kiri, kanan, dan bawah tetap 25px.
+  */
+  padding: calc(var(--navbar-height) + 25px) 25px 25px 25px;
+  font-family: var(--admin-font-family);
+  background-color: var(--admin-body-bg);
+  min-height: 100vh;
+  box-sizing: border-box; /* Tambahkan ini untuk memastikan padding tidak menambah ukuran total diluar max-width */
+}
+
+/* --- Breadcrumb --- */
+.admin-breadcrumb {
+  /* Margin-bottom mungkin tidak perlu sebesar ini jika padding container sudah ada */
+  margin-bottom: 20px; /* Sedikit dikurangi */
+  /* Padding atas bisa dihilangkan atau dikurangi karena container sudah memberi ruang */
+  padding: 0; 
+  /* border-bottom: 1px solid var(--admin-light-gray); Dihilangkan agar tidak terlalu banyak garis */
+}
+
+.admin-breadcrumb ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: var(--admin-card-bg); /* Beri background agar terlihat di atas admin-body-bg */
+  padding: 10px 15px; /* Beri padding internal untuk breadcrumb */
+  border-radius: var(--admin-border-radius);
+  box-shadow: var(--admin-box-shadow);
+  border: 1px solid var(--admin-light-gray);
+}
+
+.admin-breadcrumb li {
+  font-size: 0.9rem;
+  color: var(--admin-secondary-color);
+}
+
+.admin-breadcrumb li a {
+  color: var(--admin-primary-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.admin-breadcrumb li a:hover {
+  color: var(--admin-dark-gray);
+  text-decoration: underline;
+}
+
+.admin-breadcrumb li + li::before {
+  content: "/";
+  margin: 0 10px;
+  color: var(--admin-medium-gray);
+}
+
+.admin-breadcrumb li[aria-current="page"] {
+  font-weight: 500;
+  color: var(--admin-text-color);
+}
+
+/* --- Header Konten --- */
+.admin-content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px; /* Disesuaikan */
+  flex-wrap: wrap; /* Responsif */
+  gap: 15px;
+  /* Mungkin tidak perlu border-bottom jika card sudah memberi struktur */
+}
+
+.admin-content-header h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--admin-dark-gray);
+  margin: 0;
+}
+
+.admin-content-header .header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* --- Tombol (Sudah Baik) --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: var(--admin-border-radius);
+  border: 1px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+.btn i, .btn svg {
+  margin-right: 8px;
+}
+
+.btn-primary {
+  background-color: var(--admin-primary-color);
+  color: white;
+}
+.btn-primary:hover {
+  background-color: #2980b9; /* Warna hover lebih gelap */
+}
+
+.btn-outline-secondary {
+  background-color: transparent;
+  color: var(--admin-secondary-color);
+  border-color: var(--admin-medium-gray);
+}
+.btn-outline-secondary:hover {
+  background-color: var(--admin-light-gray);
+  color: var(--admin-dark-gray);
+}
+
+/* --- Card Styling (Sudah Baik) --- */
+.card {
+  background-color: var(--admin-card-bg);
+  border-radius: var(--admin-border-radius);
+  box-shadow: var(--admin-box-shadow);
+  margin-bottom: 25px;
+  overflow: hidden; /* Untuk memastikan border-radius pada elemen anak */
+  border: 1px solid var(--admin-light-gray); /* Tambahkan border tipis untuk definisi */
+}
+
+.card-header {
+  padding: 15px 20px;
+  background-color: #f9fafb; /* Warna header card sedikit berbeda */
+  border-bottom: 1px solid var(--admin-light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--admin-dark-gray);
+  margin: 0;
+}
+
+.card-body {
+  padding: 20px;
+  line-height: 1.7;
+}
+
+/* --- Grid Layout Detail Produk (Sudah Baik) --- */
+.admin-product-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Default 1 kolom untuk mobile */
+  gap: 25px; /* Disesuaikan sedikit */
+}
+
+@media (min-width: 992px) { /* Layar lebih besar (desktop) */
+  .admin-product-detail-grid {
+    grid-template-columns: 400px 1fr; /* Kolom kiri untuk gambar, kanan untuk info */
+  }
+}
+
+/* --- Bagian Gambar Produk (Sudah Baik) --- */
+.product-image-section .product-detail-image-admin {
+  width: 100%;
+  max-height: 450px;
+  object-fit: contain; /* atau 'cover' jika lebih sesuai */
+  border-radius: calc(var(--admin-border-radius) - 1px); /* Agar pas dengan card */
+  background-color: #f0f0f0; /* Warna jika gambar transparan */
+}
+
+.product-image-section .image-placeholder-admin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  background-color: var(--admin-light-gray);
+  border: 2px dashed var(--admin-medium-gray);
+  border-radius: var(--admin-border-radius);
+  color: var(--admin-secondary-color);
+}
+
+.image-placeholder-admin .placeholder-icon {
+  font-size: 3.5rem;
+  margin-bottom: 10px;
+}
+
+/* --- Bagian Info Produk (Sudah Baik) --- */
+.product-info-section .info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.product-info-section .info-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--admin-light-gray);
+  font-size: 0.95rem;
+  flex-wrap: wrap; /* Responsif untuk item list */
+}
+.product-info-section .info-list li:last-child {
+  border-bottom: none;
+}
+
+.product-info-section .info-list strong {
+  color: var(--admin-secondary-color);
+  margin-right: 10px;
+  flex-basis: 150px; /* Lebar tetap untuk label */
+  flex-shrink: 0;
+}
+
+.product-info-section .info-list span {
+  color: var(--admin-text-color);
+  text-align: right;
+  flex-grow: 1;
+  word-break: break-word;
+}
+.product-info-section .info-list span.price-value {
+  font-weight: bold;
+  color: var(--admin-success-color);
+}
+
+/* --- Status Badge (Sudah Baik) --- */
+.status-badge {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: var(--admin-border-radius);
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.status-badge.status-in-stock { background-color: var(--admin-success-color); }
+.status-badge.status-low-stock { background-color: var(--admin-warning-color); color: var(--admin-dark-gray); }
+.status-badge.status-out-of-stock { background-color: var(--admin-danger-color); }
+
+/* --- Deskripsi Produk (Sudah Baik) --- */
+.description-card .product-description-content {
+  color: var(--admin-text-color);
+  font-size: 0.95rem;
+}
+.description-card .product-description-content p {
+  margin-bottom: 1em;
+}
+.description-card .product-description-content p:last-child {
+  margin-bottom: 0;
+}
+.description-card .text-muted {
+  color: var(--admin-secondary-color);
+  font-style: italic;
+}
+
+/* --- Loading & Error Fullscreen (Sudah Baik) --- */
+.loading-fullscreen,
+.error-fullscreen {
+  /* Tambahkan padding atas juga di sini agar konsisten jika navbar ada */
+  padding-top: var(--navbar-height); 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--navbar-height)); /* Sesuaikan min-height */
+  text-align: center;
+  /* padding: 20px; Dihapus karena sudah diatur oleh .admin-page-container */
+}
+
+.loading-fullscreen .spinner {
+  border: 6px solid var(--admin-light-gray);
+  border-top: 6px solid var(--admin-primary-color);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-fullscreen p,
+.error-fullscreen p {
+  font-size: 1.1rem;
+  color: var(--admin-secondary-color);
+  margin-bottom: 25px;
+}
+
+.error-fullscreen h2 {
+  font-size: 1.8rem;
+  color: var(--admin-danger-color);
+  margin-bottom: 10px;
+}
+.error-fullscreen .error-icon-large {
+  font-size: 4rem;
+  color: var(--admin-danger-color);
+  margin-bottom: 20px;
+}
+
+/* --- Alert (Sudah Baik) --- */
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: var(--admin-border-radius);
+  font-size: 0.95rem;
+}
+.alert-warning {
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+}
+
+/* --- Responsivitas Tambahan (Sudah Baik) --- */
+@media (max-width: 768px) {
+  .admin-content-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .admin-content-header h1 {
+    margin-bottom: 15px;
+  }
+  .admin-content-header .header-actions {
+    width: 100%;
+  }
+  .header-actions .btn {
+    flex-grow: 1; /* Tombol memenuhi lebar jika perlu */
+  }
+  .product-info-section .info-list li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .product-info-section .info-list strong {
+    margin-bottom: 5px;
+    flex-basis: auto; /* Reset basis */
+  }
+  .product-info-section .info-list span {
+    text-align: left;
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-page-container {
+    /* Padding atas sudah dihitung dengan var(--navbar-height) */
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+  }
+  .admin-breadcrumb ol {
+    font-size: 0.85rem; /* Perkecil font breadcrumb di mobile */
+    padding: 8px 10px;
+  }
+  .admin-content-header h1 {
+    font-size: 1.5rem;
+  }
+  .btn {
+    padding: 8px 15px;
+    font-size: 0.85rem;
+  }
+  .card-header h3 {
+    font-size: 1rem;
+  }
+  .card-body {
+    padding: 15px;
+  }
+}

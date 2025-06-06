@@ -1,0 +1,262 @@
+/* src/styles/admin/users/detail-user.css */
+
+/* Variabel dan style dasar (konsisten dengan CSS admin lainnya) */
+:root {
+  --admin-primary-color: #3498db;
+  --admin-secondary-color: #7f8c8d;
+  --admin-success-color: #2ecc71;
+  --admin-danger-color: #e74c3c;
+  --admin-warning-color: #f39c12;
+  --admin-info-color: #3498DB;
+  --admin-light-gray: #ecf0f1;
+  --admin-medium-gray: #bdc3c7;
+  --admin-dark-gray: #34495e;
+  --admin-text-color: #2c3e50;
+  --admin-card-bg: #ffffff;
+  --admin-body-bg: #f4f7f9;
+  --admin-border-radius: 10px; /* Sedikit lebih besar untuk tampilan modern */
+  --admin-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Shadow lebih lembut */
+  --admin-font-family: 'Roboto', 'Segoe UI', sans-serif;
+  --navbar-height: 70px; /* Sesuaikan dengan tinggi navbar Anda! */
+}
+
+.admin-user-detail-page { /* Jika .admin-user-detail-page adalah kontainer utama */
+    padding-top: calc(var(--navbar-height) + 25px);
+}
+
+
+/* Breadcrumb & Header (Gunakan style umum admin Anda, contoh di bawah jika belum ada) */
+.admin-user-detail-page .admin-breadcrumb { margin-bottom: 25px; }
+.admin-user-detail-page .admin-breadcrumb ol { list-style: none; padding: 0; margin: 0; display: flex; align-items: center; flex-wrap: wrap; background-color: var(--admin-card-bg); padding: 12px 18px; border-radius: var(--admin-border-radius); box-shadow: var(--admin-box-shadow); border: 1px solid var(--admin-light-gray, #ecf0f1); }
+.admin-user-detail-page .admin-breadcrumb li { font-size: 0.9rem; color: var(--admin-secondary-color, #7f8c8d); }
+.admin-user-detail-page .admin-breadcrumb li a { color: var(--admin-primary-color); text-decoration: none; font-weight: 500; }
+.admin-user-detail-page .admin-breadcrumb li a:hover { text-decoration: underline; }
+.admin-user-detail-page .admin-breadcrumb li + li::before { content: "/"; margin: 0 10px; color: var(--admin-medium-gray, #bdc3c7); }
+.admin-user-detail-page .admin-breadcrumb li[aria-current="page"] { font-weight: 500; color: var(--admin-text-color, #2c3e50); }
+
+.admin-user-detail-page .admin-content-header.detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--admin-light-gray, #ecf0f1); }
+.admin-user-detail-page .admin-content-header h1 { font-size: 1.9rem; font-weight: 600; color: var(--admin-dark-gray, #34495e); margin: 0; display: flex; align-items: center; }
+.admin-user-detail-page .admin-content-header .header-icon { margin-right: 12px; color: var(--admin-primary-color); font-size: 1.5rem;}
+.admin-user-detail-page .header-actions { display: flex; gap: 12px; }
+
+/* Tombol Umum (Gunakan style umum admin Anda) */
+.admin-user-detail-page .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; font-size: 0.9rem; font-weight: 500; border-radius: var(--admin-border-radius); border: 1px solid transparent; text-decoration: none; cursor: pointer; transition: all 0.25s ease-in-out; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.admin-user-detail-page .btn i { margin-right: 8px; }
+.admin-user-detail-page .btn-primary { background-color: var(--admin-primary-color); color: white; }
+.admin-user-detail-page .btn-primary:hover { background-color: darken(var(--admin-primary-color), 10%); box-shadow: 0 4px 10px rgba(0,0,0,0.1); transform: translateY(-2px); }
+.admin-user-detail-page .btn-outline-secondary { color: var(--admin-secondary-color, #7f8c8d); border-color: var(--admin-medium-gray, #bdc3c7); background-color: white; }
+.admin-user-detail-page .btn-outline-secondary:hover { background-color: var(--admin-light-gray, #ecf0f1); color: var(--admin-dark-gray, #34495e); transform: translateY(-2px); }
+
+/* Layout Wrapper untuk Konten Detail */
+.admin-user-detail-page .user-detail-content-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 25px;
+}
+
+/* Kartu Profil Utama */
+.admin-user-detail-page .user-profile-card {
+  padding: 25px;
+  text-align: center;
+}
+.admin-user-detail-page .profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 25px;
+}
+.admin-user-detail-page .user-avatar-large {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: var(--admin-primary-light, #6B8BFF); /* Warna placeholder avatar */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem; /* Ukuran ikon avatar */
+  margin-bottom: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.admin-user-detail-page .profile-name-role h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--admin-dark-gray);
+  margin: 0 0 8px 0;
+}
+.admin-user-detail-page .role-tag {
+  display: inline-block;
+  padding: 6px 15px;
+  border-radius: 20px; /* Lebih rounded */
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: white;
+  text-transform: capitalize;
+}
+.admin-user-detail-page .role-tag i { margin-right: 6px; }
+.admin-user-detail-page .role-tag.role-admin { background-color: var(--admin-danger-color); }
+.admin-user-detail-page .role-tag.role-user { background-color: var(--admin-success-color); }
+
+.admin-user-detail-page .profile-contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center; /* Tengahkan info kontak */
+  border-top: 1px solid var(--admin-light-gray);
+  padding-top: 20px;
+}
+.admin-user-detail-page .contact-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  color: var(--admin-text-color);
+}
+.admin-user-detail-page .contact-item .contact-icon {
+  margin-right: 10px;
+  color: var(--admin-secondary-color);
+  font-size: 1.1rem;
+  width: 20px; /* Lebar tetap untuk ikon agar rapi */
+  text-align: center;
+}
+.admin-user-detail-page .contact-item a {
+  color: var(--admin-primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+.admin-user-detail-page .contact-item a:hover {
+  text-decoration: underline;
+}
+
+/* Kartu Informasi Tambahan */
+.admin-user-detail-page .user-additional-info .card-header {
+  display: flex;
+  align-items: center;
+}
+.admin-user-detail-page .user-additional-info .card-header i {
+  margin-right: 10px;
+  color: var(--admin-primary-color);
+}
+
+.admin-user-detail-page .info-grid-detail {
+  display: grid;
+  grid-template-columns: 1fr; /* Default 1 kolom */
+  gap: 20px;
+}
+@media (min-width: 600px) { /* 2 kolom jika cukup lebar */
+  .admin-user-detail-page .info-grid-detail {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+.admin-user-detail-page .info-block {
+  background-color: var(--admin-light-gray, #f8f9fa);
+  padding: 15px;
+  border-radius: var(--admin-border-radius);
+  border: 1px solid var(--admin-medium-gray, #e9ecef);
+}
+.admin-user-detail-page .info-block-label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--admin-secondary-color);
+  margin-bottom: 6px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.admin-user-detail-page .info-block-value {
+  font-size: 1rem;
+  color: var(--admin-text-color);
+  font-weight: 500;
+  word-break: break-word;
+}
+.admin-user-detail-page .info-block-value.address-value {
+  white-space: pre-wrap; /* Agar alamat bisa wrap dengan baik */
+  line-height: 1.6;
+}
+.admin-user-detail-page .info-block.full-width-info {
+  grid-column: 1 / -1; /* Span full width jika di grid multi-kolom */
+}
+
+/* Animasi untuk kartu */
+.animated-card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUpCard 0.6s ease-out forwards;
+}
+@keyframes fadeInUpCard {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tombol Primary Outline untuk Full Page Alert */
+.admin-user-detail-page .btn-primary-outline {
+  background-color: transparent;
+  color: var(--admin-primary-color);
+  border: 1px solid var(--admin-primary-color);
+  padding: 8px 16px;
+  border-radius: var(--admin-border-radius);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+.admin-user-detail-page .btn-primary-outline:hover {
+  background-color: var(--admin-primary-color);
+  color: white;
+}
+
+
+/* Loading & Alert Fullscreen (Gunakan style umum admin Anda) */
+.admin-user-detail-page .loading-fullscreen, 
+.admin-user-detail-page .alert.full-page-alert {
+  min-height: calc(100vh - var(--navbar-height) - 150px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+.admin-user-detail-page .loading-fullscreen .spinner { border: 6px solid var(--admin-light-gray, #ecf0f1); border-top: 6px solid var(--admin-primary-color); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+.admin-user-detail-page .loading-fullscreen p { font-size: 1.1rem; color: var(--admin-secondary-color, #7f8c8d); }
+.admin-user-detail-page .alert.full-page-alert h4 { margin-top: 0; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; font-size: 1.2rem; }
+.admin-user-detail-page .alert.full-page-alert p { margin-bottom: 15px; font-size: 1rem; }
+
+.admin-user-detail-page .alert-danger { color: var(--admin-danger-color); background-color: #fdecea; border: 1px solid var(--admin-danger-color); } /* Warna lebih lembut */
+.admin-user-detail-page .alert-warning { color: #856404; background-color: #fff3cd; border-color: #ffeeba; }
+
+
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* Responsivitas */
+@media (min-width: 768px) {
+  .admin-user-detail-page .user-profile-card .profile-header {
+    flex-direction: row; /* Avatar di kiri, nama di kanan */
+    text-align: left;
+    gap: 25px;
+  }
+  .admin-user-detail-page .user-profile-card .profile-contact-info {
+    flex-direction: row; /* Kontak jadi baris */
+    justify-content: space-around; /* Atau space-between */
+    flex-wrap: wrap;
+  }
+  .admin-user-detail-page .user-avatar-large {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 576px) {
+    .admin-user-detail-page .admin-content-header.detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .admin-user-detail-page .header-actions {
+        width: 100%;
+    }
+    .admin-user-detail-page .header-actions .btn {
+        flex-grow: 1;
+        justify-content: center;
+    }
+}
