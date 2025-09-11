@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->integer('total')->default(1);
             $table->enum('status', ['pending', 'waiting_confirmation', 'paid', 'failed'])->default('pending');
-            $table->enum('payment_method', ['bank_transfer', 'cod', 'e_wallet']);
+            $table->enum('payment_method', ['bank_transfer', 'cod', 'e_wallet'])->nullable();
             $table->string('payment_proof')->nullable();
             $table->timestamp('payment_date')->nullable(); 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

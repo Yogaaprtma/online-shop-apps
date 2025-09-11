@@ -19,6 +19,7 @@ const Orders = () => {
         setOrders(response.data.data);
       } catch (error) {
         console.error("Gagal mengambil data pesanan:", error);
+        alert("Gagal mengambil data pesanan");
       } finally {
         setLoading(false);
       }
@@ -26,6 +27,25 @@ const Orders = () => {
 
     fetchOrders();
   }, []);
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
+    script.setAttribute('data-client-key', import.meta.env.VITE_MIDTRANS_CLIENT_KEY || 'your-client-key');
+    script.async = true;
+    document.body.appendChild(script);
+    return () => document.body.removeChild(script);
+  }, []);
+
+  const refetchOrders = async () => {
+    const response = await api.get("/orders");
+    setOrders(response.data.data);
+    if (selectedOrder) {
+      // refresh detail jika sedang terbuka
+      const res = await api.get(`/orders/${selectedOrder.id}`);
+      setSelectedOrder(res.data.data);
+    }
+  };
 
   const getOrderDetail = async (orderId) => {
     try {
@@ -56,40 +76,15 @@ const Orders = () => {
       alert("Pilih file bukti pembayaran terlebih dahulu");
       return;
     }
-
     const formData = new FormData();
     formData.append("payment_proof", paymentFile);
-
     try {
       setUploadLoading(true);
-      await api.post(`/orders/${orderId}/pay`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      // Update order status locally
-      const updatedOrders = orders.map(order => {
-        if (order.id === orderId) {
-          return { 
-            ...order, 
-            status: "waiting_confirmation",
-            payment_proof: true // just to indicate it exists
-          };
-        }
-        return order;
-      });
-      
-      setOrders(updatedOrders);
-      
-      if (selectedOrder) {
-        setSelectedOrder({
-          ...selectedOrder,
-          status: "waiting_confirmation",
-          payment_proof: true
-        });
+      await api.post(`/orders/${orderId}/pay`, formData, { headers: { "Content-Type": "multipart/form-data" } });
+      setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: "waiting_confirmation", payment_proof: true } : o));
+      if (selectedOrder && selectedOrder.id === orderId) {
+        setSelectedOrder(prev => ({ ...prev, status: "waiting_confirmation", payment_proof: true }));
       }
-      
       alert("Bukti pembayaran berhasil diunggah");
       setPaymentFile(null);
       setFileName("");
@@ -101,57 +96,91 @@ const Orders = () => {
     }
   };
 
+  // --- Label metode: gunakan payment_method jika ada; jika null, fallback ke payment_type ---
+  const getPaymentLabel = (payment_method, payment_type) => {
+    if (payment_method) {
+      switch (payment_method) {
+        case "bank_transfer": return "Transfer Bank";
+        case "cod": return "Cash on Delivery";
+        case "e_wallet": return "E-Wallet";
+        default: return payment_method;
+      }
+    }
+    if (payment_type) {
+      switch (payment_type) {
+        case "credit_card": return "Kartu Kredit";
+        case "bank_transfer":
+        case "echannel":
+        case "permata":
+        case "bca_va":
+        case "bni_va":
+        case "bri_va":
+          return "Transfer Bank";
+        case "gopay": return "GoPay";
+        case "shopeepay": return "ShopeePay";
+        case "qris": return "QRIS";
+        default: return payment_type.replace(/_/g, " ").toUpperCase();
+      }
+    }
+    return "—";
+  };
+
+  const initiateMidtransPayment = (snapToken, orderCode) => {
+    if (!window.snap) {
+      alert("Midtrans Snap.js belum dimuat. Silakan coba lagi.");
+      return;
+    }
+    window.snap.pay(snapToken, {
+      onSuccess: async () => {
+        try { await api.post("/midtrans/verify", { order_code: orderCode }); } catch {}
+        await refetchOrders();
+        alert("Pembayaran berhasil!");
+      },
+      onPending: async () => {
+        try { await api.post("/midtrans/verify", { order_code: orderCode }); } catch {}
+        await refetchOrders();
+        alert("Pembayaran sedang diproses. Silakan selesaikan pembayaran.");
+      },
+      onError: () => {
+        alert("Pembayaran gagal. Silakan coba lagi.");
+      },
+      onClose: async () => {
+        try { await api.post("/midtrans/verify", { order_code: orderCode }); } catch {}
+        await refetchOrders();
+      }
+    });
+  };
+
   const getStatusLabel = (status) => {
     switch (status) {
-      case "pending":
-        return "Menunggu Pembayaran";
-      case "waiting_confirmation":
-        return "Menunggu Konfirmasi";
-      case "paid":
-        return "Dibayar";
-      case "failed":
-        return "Gagal";
-      default:
-        return status;
+      case "pending": return "Menunggu Pembayaran";
+      case "waiting_confirmation": return "Menunggu Konfirmasi";
+      case "paid": return "Dibayar";
+      case "processing": return "Diproses";
+      case "shipped": return "Dikirim";
+      case "completed": return "Selesai";
+      case "cancelled": return "Dibatalkan";
+      case "failed": return "Gagal";
+      default: return status;
     }
   };
 
   const getStatusClass = (status) => {
     switch (status) {
-      case "pending":
-        return "status-pending";
-      case "waiting_confirmation":
-        return "status-waiting";
-      case "paid":
-        return "status-paid";
-      case "failed":
-        return "status-failed";
-      default:
-        return "";
+      case "pending": return "status-pending";
+      case "waiting_confirmation": return "status-waiting";
+      case "paid": return "status-paid";
+      case "processing": return "status-processing";
+      case "shipped": return "status-shipped";
+      case "completed": return "status-completed";
+      case "cancelled": return "status-cancelled";
+      case "failed": return "status-failed";
+      default: return "";
     }
   };
 
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('id-ID', { 
-      style: 'currency', 
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(amount);
-  };
-
-  const getPaymentMethodLabel = (method) => {
-    switch (method) {
-      case "bank_transfer":
-        return "Transfer Bank";
-      case "cod":
-        return "Cash on Delivery";
-      case "e_wallet":
-        return "E-Wallet";
-      default:
-        return method;
-    }
-  };
+  const formatCurrency = (amount) =>
+    new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
 
   if (loading) {
     return (
@@ -176,14 +205,10 @@ const Orders = () => {
 
       {orders.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-icon">
-            <i className="fas fa-shopping-bag"></i>
-          </div>
+          <div className="empty-icon"><i className="fas fa-shopping-bag"></i></div>
           <h3>Belum Ada Pesanan</h3>
           <p>Anda belum melakukan pemesanan apapun</p>
-          <Link to="/customer/dashboard" className="shop-now-button">
-            Mulai Belanja
-          </Link>
+          <Link to="/customer/dashboard" className="shop-now-button">Mulai Belanja</Link>
         </div>
       ) : (
         <div className="orders-grid">
@@ -193,18 +218,14 @@ const Orders = () => {
                 <div className="order-meta">
                   <span className="order-number">Order #{order.id}</span>
                   <span className="order-date">
-                    {new Date(order.created_at).toLocaleDateString("id-ID", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}
+                    {new Date(order.created_at).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
                   </span>
                 </div>
                 <div className={`order-status ${getStatusClass(order.status)}`}>
                   {getStatusLabel(order.status)}
                 </div>
               </div>
-              
+
               <div className="order-card-body">
                 <div className="order-info-row">
                   <div className="info-item">
@@ -213,25 +234,27 @@ const Orders = () => {
                   </div>
                   <div className="info-item">
                     <span className="info-label">Metode Pembayaran</span>
-                    <span className="info-value">{getPaymentMethodLabel(order.payment_method)}</span>
+                    <span className="info-value">
+                      {getPaymentLabel(order.payment_method, order.payment_type)}
+                    </span>
                   </div>
                 </div>
               </div>
-              
+
               <div className="order-card-footer">
-                <button
-                  className="detail-button"
-                  onClick={() => getOrderDetail(order.id)}
-                >
+                <button className="detail-button" onClick={() => getOrderDetail(order.id)}>
                   <i className="fas fa-eye"></i> Lihat Detail
                 </button>
-                
-                {order.status === "pending" && order.payment_method !== "cod" && !order.payment_proof && (
+
+                {order.status === "pending" && order.snap_token && (
                   <button
                     className="payment-button"
-                    onClick={() => getOrderDetail(order.id)}
+                    onClick={() => {
+                      getOrderDetail(order.id);
+                      setTimeout(() => initiateMidtransPayment(order.snap_token, order.order_code), 0);
+                    }}
                   >
-                    <i className="fas fa-upload"></i> Upload Bukti Pembayaran
+                    <i className="fas fa-credit-card"></i> Bayar Sekarang
                   </button>
                 )}
               </div>
@@ -249,7 +272,7 @@ const Orders = () => {
                 <i className="fas fa-times"></i>
               </button>
             </div>
-            
+
             <div className="modal-body">
               <div className="order-detail-section">
                 <div className="detail-header">Informasi Pesanan</div>
@@ -257,11 +280,7 @@ const Orders = () => {
                   <span className="detail-label">Tanggal Pemesanan</span>
                   <span className="detail-value">
                     {new Date(selectedOrder.created_at).toLocaleDateString("id-ID", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
+                      day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit",
                     })}
                   </span>
                 </div>
@@ -274,9 +293,19 @@ const Orders = () => {
                 <div className="detail-row">
                   <span className="detail-label">Metode Pembayaran</span>
                   <span className="detail-value">
-                    {getPaymentMethodLabel(selectedOrder.payment_method)}
+                    {getPaymentLabel(selectedOrder.payment_method, selectedOrder.payment_type)}
                   </span>
                 </div>
+                {selectedOrder.payment_date && (
+                  <div className="detail-row">
+                    <span className="detail-label">Tanggal Pembayaran</span>
+                    <span className="detail-value">
+                      {new Date(selectedOrder.payment_date).toLocaleDateString("id-ID", {
+                        day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit",
+                      })}
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div className="order-items-section">
@@ -288,16 +317,16 @@ const Orders = () => {
                     <span className="item-price-header">Harga</span>
                     <span className="item-subtotal-header">Subtotal</span>
                   </div>
-                  
+
                   {selectedOrder.items?.map((item) => (
                     <div className="item-row" key={item.id}>
-                      <span className="item-name">{item.product.name_product}</span>
+                      <span className="item-name">{item.product?.name_product || "Produk Telah Dihapus"}</span>
                       <span className="item-quantity">{item.quantity}</span>
                       <span className="item-price">{formatCurrency(item.price)}</span>
                       <span className="item-subtotal">{formatCurrency(item.price * item.quantity)}</span>
                     </div>
                   ))}
-                  
+
                   <div className="order-total-row">
                     <span className="total-label">Total Pesanan</span>
                     <span className="total-value">{formatCurrency(selectedOrder.total)}</span>
@@ -305,54 +334,17 @@ const Orders = () => {
                 </div>
               </div>
 
-              {selectedOrder.status === "pending" && 
-               selectedOrder.payment_method !== "cod" && 
-               !selectedOrder.payment_proof && (
+              {selectedOrder.status === "pending" && selectedOrder.snap_token && (
                 <div className="payment-section">
-                  <div className="detail-header">Upload Bukti Pembayaran</div>
-                  <div className="payment-instructions">
-                    <p>Silakan transfer ke rekening berikut:</p>
-                    <div className="bank-account">
-                      <p><strong>Bank BCA</strong></p>
-                      <p>Nomor Rekening: 9876543210</p>
-                      <p>Atas Nama: PT. Toko Online Indonesia</p>
-                    </div>
-                  </div>
-                  
-                  <div className="upload-container">
-                    <div className="file-input-container">
-                      <input
-                        type="file"
-                        id="payment-proof"
-                        className="file-input"
-                        accept="image/jpeg,image/png,application/pdf"
-                        onChange={handleFileChange}
-                      />
-                      <label htmlFor="payment-proof" className="file-label">
-                        <i className="fas fa-cloud-upload-alt"></i>
-                        <span>{fileName || "Pilih File Bukti Pembayaran"}</span>
-                      </label>
-                    </div>
-                    
+                  <div className="detail-header">Pembayaran</div>
+                  <div className="midtrans-payment">
+                    <p>Silakan selesaikan pembayaran melalui Midtrans.</p>
                     <button
-                      className="upload-button"
-                      onClick={() => uploadPaymentProof(selectedOrder.id)}
-                      disabled={!paymentFile || uploadLoading}
+                      className="midtrans-button"
+                      onClick={() => initiateMidtransPayment(selectedOrder.snap_token, selectedOrder.order_code)}
                     >
-                      {uploadLoading ? (
-                        <>
-                          <div className="button-loader"></div> Mengunggah...
-                        </>
-                      ) : (
-                        <>
-                          <i className="fas fa-upload"></i> Upload Bukti Pembayaran
-                        </>
-                      )}
+                      <i className="fas fa-credit-card"></i> Bayar dengan Midtrans
                     </button>
-                  </div>
-                  
-                  <div className="upload-note">
-                    <p><i className="fas fa-info-circle"></i> Format yang diterima: JPG, PNG, PDF (maks. 2MB)</p>
                   </div>
                 </div>
               )}

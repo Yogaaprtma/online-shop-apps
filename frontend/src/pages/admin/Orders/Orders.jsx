@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "/src/services/api.js";
 import "/src/styles/admin/orders/orders.css";
 
-// Komponen ikon sederhana
 const Icon = ({ name, className }) => <i className={`fas fa-${name} ${className || ''}`}></i>;
 
 const AdminOrderList = () => {
@@ -17,7 +16,6 @@ const AdminOrderList = () => {
 
   const navigate = useNavigate();
 
-  // Fungsi untuk memuat SweetAlert2 dari CDN (seperti contoh Anda)
   const loadSweetAlert = () => {
     return new Promise((resolve, reject) => {
       if (window.Swal) {
@@ -39,17 +37,14 @@ const AdminOrderList = () => {
     });
   };
 
-
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         setLoading(true);
         setError(null);
         const response = await api.get("/admin/orders");
-        console.log("Data Pesanan dari API:", response.data.data);
         setOrders(response.data.data || []);
       } catch (err) {
-        console.error("Gagal mengambil data pesanan:", err);
         setError(
           err.response?.data?.message ||
             "Terjadi kesalahan saat mengambil data pesanan."
@@ -103,25 +98,51 @@ const AdminOrderList = () => {
       case "shipped": return "Dikirim";
       case "completed": return "Selesai";
       case "cancelled": return "Dibatalkan";
-      default:
-        return status ? status.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase()) : "N/A";
+      default: return status ? status.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase()) : "N/A";
     }
   };
 
-  // Menggunakan metode loadSweetAlert dari CDN
+  // NEW: helper label metode bayar (kategori + fallback ke payment_type)
+  const getPaymentMethodText = (method, paymentType) => {
+    if (method) {
+      switch (method) {
+        case "bank_transfer": return "Transfer Bank";
+        case "cod": return "Cash on Delivery (COD)";
+        case "e_wallet": return "E-Wallet";
+        default: return method;
+      }
+    }
+    if (paymentType) {
+      switch (paymentType) {
+        case "credit_card": return "Kartu Kredit";
+        case "bank_transfer":
+        case "echannel":
+        case "permata":
+        case "bca_va":
+        case "bni_va":
+        case "bri_va": return "Transfer Bank";
+        case "gopay": return "GoPay";
+        case "shopeepay": return "ShopeePay";
+        case "qris": return "QRIS";
+        default: return paymentType.replace(/_/g, " ").toUpperCase();
+      }
+    }
+    return "—";
+  };
+
   const handleConfirmPayment = async (orderId) => {
     try {
-      const Swal = await loadSweetAlert(); // Muat SweetAlert
+      const Swal = await loadSweetAlert();
       const result = await Swal.fire({
         title: "Konfirmasi Pembayaran?",
         text: "Apakah Anda yakin ingin mengonfirmasi pembayaran untuk pesanan ini?",
         icon: "question",
         showCancelButton: true,
-        confirmButtonColor: "var(--admin-success-color, #28a745)", // Menggunakan variabel CSS jika ada
+        confirmButtonColor: "var(--admin-success-color, #28a745)",
         cancelButtonColor: "var(--admin-secondary-color, #6c757d)",
         confirmButtonText: "Ya, Konfirmasi!",
         cancelButtonText: "Batal",
-        customClass: { // Menambahkan custom class agar konsisten dengan contoh Anda
+        customClass: {
           title: "swal-title",
           content: "swal-content",
           confirmButton: "swal-confirm",
@@ -130,28 +151,25 @@ const AdminOrderList = () => {
       });
 
       if (result.isConfirmed) {
-        setLoading(true); 
+        setLoading(true);
         await api.post(`/admin/orders/${orderId}/confirm`);
         setOrders(prevOrders =>
           prevOrders.map(order =>
             order.id === orderId ? { ...order, status: 'paid', payment_date: new Date().toISOString() } : order
           )
         );
-        // Pesan sukses menggunakan SweetAlert
         Swal.fire({
-            title: "Berhasil!", 
-            text: "Pembayaran telah dikonfirmasi.", 
-            icon: "success",
-            timer: 1800, // Durasi tampil
-            showConfirmButton: false // Tidak perlu tombol OK jika ada timer
+          title: "Berhasil!",
+          text: "Pembayaran telah dikonfirmasi.",
+          icon: "success",
+          timer: 1800,
+          showConfirmButton: false
         });
       }
     } catch (err) {
-      console.error("Error pada proses konfirmasi atau SweetAlert:", err.message);
-      setError("Gagal memproses konfirmasi pembayaran."); // Pesan error umum
-      // Fallback jika SweetAlert gagal di tahap awal atau ada error lain
+      setError("Gagal memproses konfirmasi pembayaran.");
       try {
-        const Swal = await loadSweetAlert(); // Coba muat lagi untuk pesan error
+        const Swal = await loadSweetAlert();
         Swal.fire({
           title: "Error!",
           text: err.response?.data?.message || "Gagal mengonfirmasi pembayaran.",
@@ -159,14 +177,67 @@ const AdminOrderList = () => {
           confirmButtonText: "OK",
         });
       } catch {
-        // Fallback paling akhir jika SweetAlert benar-benar tidak bisa dimuat
-        alert(err.response?.data?.message || "Gagal mengonfirmasi pembayaran. SweetAlert juga gagal dimuat.");
+        alert(err.response?.data?.message || "Gagal mengonfirmasi pembayaran.");
       }
     } finally {
       setLoading(false);
     }
   };
 
+  // (Tetap dibiarkan meski dropdown di list dihapus — status bisa diubah via halaman detail)
+  const handleUpdateStatus = async (orderId, newStatus) => {
+    try {
+      const Swal = await loadSweetAlert();
+      const result = await Swal.fire({
+        title: `Ubah Status ke ${getStatusText(newStatus)}?`,
+        text: `Apakah Anda yakin ingin mengubah status pesanan #${orderId} ke ${getStatusText(newStatus)}?`,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "var(--admin-success-color, #28a745)",
+        cancelButtonColor: "var(--admin-secondary-color, #6c757d)",
+        confirmButtonText: "Ya, Ubah!",
+        cancelButtonText: "Batal",
+        customClass: {
+          title: "swal-title",
+          content: "swal-content",
+          confirmButton: "swal-confirm",
+          cancelButton: "swal-cancel",
+        }
+      });
+
+      if (result.isConfirmed) {
+        setLoading(true);
+        await api.post(`/admin/orders/${orderId}/status`, { status: newStatus });
+        setOrders(prevOrders =>
+          prevOrders.map(order =>
+            order.id === orderId ? { ...order, status: newStatus } : order
+          )
+        );
+        Swal.fire({
+          title: "Berhasil!",
+          text: `Status pesanan telah diubah ke ${getStatusText(newStatus)}.`,
+          icon: "success",
+          timer: 1800,
+          showConfirmButton: false
+        });
+      }
+    } catch (err) {
+      setError("Gagal mengubah status pesanan.");
+      try {
+        const Swal = await loadSweetAlert();
+        Swal.fire({
+          title: "Error!",
+          text: err.response?.data?.message || "Gagal mengubah status pesanan.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      } catch {
+        alert(err.response?.data?.message || "Gagal mengubah status pesanan.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredOrders = useMemo(() => {
     return orders
@@ -312,13 +383,15 @@ const AdminOrderList = () => {
                 <tr key={order.id}>
                   <td data-label="ID Pesanan">#{order.id}</td>
                   <td data-label="Pelanggan">
-                    {order.user?.nama || "N/A"} 
-                    <br/> 
+                    {order.user?.nama || "N/A"}
+                    <br/>
                     <small>{order.user?.email || "Email tidak tersedia"}</small>
                   </td>
                   <td data-label="Tanggal">{formatDate(order.created_at)}</td>
                   <td data-label="Total">{formatPrice(order.total)}</td>
-                  <td data-label="Metode Bayar">{getStatusText(order.payment_method)}</td>
+                  <td data-label="Metode Bayar">
+                    {getPaymentMethodText(order.payment_method, order.payment_type)}
+                  </td>
                   <td data-label="Status">
                     <span className={`status-pill ${getStatusClass(order.status)}`}>
                       {getStatusText(order.status)}
@@ -332,6 +405,7 @@ const AdminOrderList = () => {
                     >
                       <Icon name="eye" /> <span className="btn-action-text">Lihat</span>
                     </button>
+
                     {order.status === "waiting_confirmation" && order.payment_proof && (
                       <button
                         onClick={() => handleConfirmPayment(order.id)}
@@ -341,6 +415,8 @@ const AdminOrderList = () => {
                         <Icon name="check-circle" /> <span className="btn-action-text">Konfirmasi</span>
                       </button>
                     )}
+
+                    {/* Dropdown ubah status DIHAPUS dari list sesuai permintaan */}
                   </td>
                 </tr>
               ))
@@ -381,6 +457,20 @@ const AdminOrderList = () => {
           </button>
         </div>
       )}
+      
+      <style jsx>{`
+        .status-select {
+          padding: 5px;
+          border-radius: 4px;
+          border: 1px solid #ccc;
+          background-color: #fff;
+          cursor: pointer;
+        }
+        .status-select:focus {
+          outline: none;
+          border-color: #28a745;
+        }
+      `}</style>
     </div>
   );
 };

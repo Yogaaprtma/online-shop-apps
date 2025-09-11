@@ -148,75 +148,13 @@ const Cart = () => {
     }
   };
 
-  const handleCheckout = async () => {
+
+  const handleCheckout = () => {
     if (cartItems.length === 0) {
       alert("Keranjang belanja kosong");
       return;
     }
-
-    try {
-      // Improved payment method selection using custom modal
-      const paymentMethods = [
-        { id: "bank_transfer", name: "Transfer Bank" },
-        { id: "cod", name: "Cash on Delivery" },
-        { id: "e_wallet", name: "E-Wallet" }
-      ];
-      
-      // Create modal for selecting payment method
-      const modal = document.createElement("div");
-      modal.className = "payment-modal";
-      modal.innerHTML = `
-        <div class="payment-modal-content">
-          <h3>Pilih Metode Pembayaran</h3>
-          <div class="payment-methods">
-            ${paymentMethods.map(method => `
-              <button class="payment-method-btn" data-method="${method.id}">
-                ${method.name}
-              </button>
-            `).join('')}
-          </div>
-          <button class="payment-modal-close">Batal</button>
-        </div>
-      `;
-      
-      document.body.appendChild(modal);
-      
-      // Handle payment method selection
-      return new Promise((resolve) => {
-        const buttons = modal.querySelectorAll(".payment-method-btn");
-        const closeBtn = modal.querySelector(".payment-modal-close");
-        
-        buttons.forEach(button => {
-          button.addEventListener("click", async () => {
-            const method = button.getAttribute("data-method");
-            modal.remove();
-            
-            try {
-              const response = await api.post("/checkout", {
-                payment_method: method
-              });
-              
-              alert("Checkout berhasil! Pesanan Anda sedang diproses.");
-              navigate("/customer/orders");
-            } catch (error) {
-              console.error("Checkout gagal:", error);
-              alert("Checkout gagal. Silakan coba lagi.");
-            }
-            
-            resolve();
-          });
-        });
-        
-        closeBtn.addEventListener("click", () => {
-          modal.remove();
-          resolve();
-        });
-      });
-      
-    } catch (error) {
-      console.error("Checkout gagal:", error);
-      alert("Checkout gagal. Silakan coba lagi.");
-    }
+    navigate("/customer/orders/checkout");
   };
 
   if (loading) {

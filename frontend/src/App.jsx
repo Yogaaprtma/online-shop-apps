@@ -20,6 +20,8 @@ import DashboardCustomer from "./pages/customer/DashboardCustomer";
 import Cart from "./pages/customer/cart/Cart";
 import Orders from "./pages/customer/orders/Orders";
 import ProductDetail from "./pages/customer/ProductDetail";
+import Checkout from "./pages/customer/orders/Checkout";
+
 import PrivateRoute from "./components/PrivateRoute";
 import Navbar from "./components/Navbar"; 
 import api from "./services/api";
@@ -207,6 +209,14 @@ function App() {
           element={
             <PrivateRoute role="user">
               <Orders />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/customer/orders/checkout"
+          element={
+            <PrivateRoute role="user">
+              <Checkout />
             </PrivateRoute>
           }
         />

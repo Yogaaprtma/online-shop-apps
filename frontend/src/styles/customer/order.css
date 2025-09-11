@@ -197,6 +197,26 @@
   color: #155724;
 }
 
+.status-badge.status-processing { 
+  background: #cfe2ff; 
+  color: #084298; 
+} 
+
+.status-badge.status-shipped { 
+  background: #e2e3e5; 
+  color: #41464b; 
+}  
+
+.status-badge.status-completed { 
+  background: #d1e7dd; 
+  color: #0f5132; 
+}
+
+.status-badge.status-cancelled { 
+  background: #dc3545; 
+  color: #fff; 
+} 
+
 .status-failed {
   background-color: #F8D7DA;
   color: #721C24;
@@ -379,6 +399,8 @@
   font-size: 12px;
   font-weight: 600;
 }
+
+
 
 /* Order Items */
 .order-items-list {

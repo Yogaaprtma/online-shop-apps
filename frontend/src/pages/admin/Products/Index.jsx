@@ -13,6 +13,7 @@ const ProductList = () => {
   const [filterStatus, setFilterStatus] = useState("all");
   const [sortOption, setSortOption] = useState("default");
   const [currentPage, setCurrentPage] = useState(1);
+  const [failedImages, setFailedImages] = useState(new Set()); // State untuk melacak gambar yang gagal dimuat
 
   const navigate = useNavigate();
 
@@ -176,11 +177,23 @@ const ProductList = () => {
   };
 
   const getImageUrl = (imagePath) => {
-    if (!imagePath) return "/placeholder-product.png";
-    if (imagePath.startsWith('http')) return imagePath;
-    return `${import.meta.env.VITE_APP_URL || 'http://127.0.0.1:8000'}/storage/${imagePath}`;
+    if (!imagePath) {
+      console.log("Image path is null or undefined, using placeholder");
+      return "/placeholder-product.png";
+    }
+    if (imagePath.startsWith('http')) {
+      console.log("Image path is an external URL:", imagePath);
+      return imagePath;
+    }
+    const url = `${import.meta.env.VITE_APP_URL || 'http://127.0.0.1:8000'}/storage/${imagePath}`;
+    console.log("Generated image URL:", url);
+    return url;
   };
   
+  const handleImageError = (productId) => {
+    setFailedImages(prev => new Set(prev).add(productId));
+  };
+
   const productStats = useMemo(() => ({
     total: allProducts.length,
     inStock: allProducts.filter(p => p.stock > 10).length,
@@ -231,7 +244,6 @@ const ProductList = () => {
     <div className="product-list-page">
       <div className="page-container">
         <div className="product-list-container">
-          {/* Header section */}
           <nav aria-label="breadcrumb" className="product-breadcrumb">
             <ol>
               <li><Link to="/admin/dashboard">Admin</Link></li>
@@ -251,7 +263,6 @@ const ProductList = () => {
             </div>
           </div>
 
-          {/* Dashboard statistik produk */}
           <div className="product-stats-dashboard">
             <div className="stat-card total-products">
               <div className="stat-icon"><i className="fas fa-boxes"></i></div>
@@ -283,7 +294,6 @@ const ProductList = () => {
             </div>
           </div>
 
-          {/* Pesan error */}
           {error && (
             <div className="error-message">
               <div className="message-icon error-icon"><i className="fas fa-exclamation-circle"></i></div>
@@ -295,7 +305,6 @@ const ProductList = () => {
             </div>
           )}
 
-          {/* Search dan filter container */}
           <div className="search-filter-container">
             <div className="search-container">
               <div className="search-input-wrapper">
@@ -353,7 +362,6 @@ const ProductList = () => {
             </div>
           </div>
 
-          {/* Product Grid */}
           <div className="products-grid">
             {loading ? (
               <div className="loading-container">
@@ -372,10 +380,10 @@ const ProductList = () => {
                       {product.stock > 0 && product.stock < 10 && <span className="product-badge low-stock">Stok Terbatas</span>}
                     </div>
                     <img 
-                        src={getImageUrl(product.image)} 
-                        alt={product.name_product}
-                        className="product-image"
-                        onError={(e) => { e.target.onerror = null; e.target.src = "/placeholder-product.png";}}
+                      src={failedImages.has(product.id) ? "/placeholder-product.png" : getImageUrl(product.image)} 
+                      alt={product.name_product}
+                      className="product-image"
+                      onError={() => handleImageError(product.id)}
                     />
                   </div>
                   <div className="product-content">

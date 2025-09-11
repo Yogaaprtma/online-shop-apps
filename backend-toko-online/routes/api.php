@@ -22,10 +22,14 @@ use App\Http\Controllers\API\ReportController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+// Midtrans Notification Endpoint (tanpa autentikasi)
+Route::post('/midtrans/notification', [OrderController::class, 'handleMidtransNotification']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/users/count', [AuthController::class, 'countUsers']);
+    Route::post('/midtrans/verify', [OrderController::class, 'verify']);
 
     // Public (User & Admin)
     Route::get('/products', [ProductController::class, 'index']);
@@ -48,6 +52,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/admin/orders', [OrderController::class, 'index']);
         Route::get('/admin/orders/{id}', [OrderController::class, 'show']);
         Route::post('/admin/orders/{id}/confirm', [OrderController::class, 'confirmPayment']);
+        Route::post('/admin/orders/{id}/status', [OrderController::class, 'updateStatus']);
 
         // Report
         Route::get('/admin/reports/sales/download/{format}', [ReportController::class, 'downloadSalesReport']);
