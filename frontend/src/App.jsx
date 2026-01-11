@@ -17,10 +17,12 @@ import UserDetailAdmin from "./pages/admin/Users/DetailUser";
 import ReportsPage from "./pages/admin/Reports/Reports"; 
 
 import DashboardCustomer from "./pages/customer/DashboardCustomer";
+import CustomerProducts from "./pages/customer/CustomerProducts";
 import Cart from "./pages/customer/cart/Cart";
 import Orders from "./pages/customer/orders/Orders";
 import ProductDetail from "./pages/customer/ProductDetail";
 import Checkout from "./pages/customer/orders/Checkout";
+import Profile from "./pages/customer/profile/Profile";
 
 import PrivateRoute from "./components/PrivateRoute";
 import Navbar from "./components/Navbar"; 
@@ -35,7 +37,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await api.get("/user");
+        const response = await api.get("/profile");
         const currentUser = response.data.data;
         setUser(currentUser);
 
@@ -189,6 +191,14 @@ function App() {
           }
         />
         <Route
+          path="/customer/products"
+          element={
+            <PrivateRoute role="user">
+              <CustomerProducts />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="/customer/product/detail/:id"
           element={
             <PrivateRoute role="user">
@@ -217,6 +227,14 @@ function App() {
           element={
             <PrivateRoute role="user">
               <Checkout />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/customer/profile"
+          element={
+            <PrivateRoute role="user">
+              <Profile />
             </PrivateRoute>
           }
         />

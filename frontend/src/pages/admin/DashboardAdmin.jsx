@@ -43,7 +43,7 @@ const DashboardAdmin = () => {
 
   const fetchData = async () => {
     try {
-      const userResponse = await api.get("/user");
+      const userResponse = await api.get("/profile");
       const currentUser = userResponse.data.data;
       if (currentUser.role !== "admin") {
         navigate("/dashboard");

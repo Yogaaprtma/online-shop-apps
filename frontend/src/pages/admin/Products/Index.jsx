@@ -13,7 +13,7 @@ const ProductList = () => {
   const [filterStatus, setFilterStatus] = useState("all");
   const [sortOption, setSortOption] = useState("default");
   const [currentPage, setCurrentPage] = useState(1);
-  const [failedImages, setFailedImages] = useState(new Set()); // State untuk melacak gambar yang gagal dimuat
+  const [failedImages, setFailedImages] = useState(new Set());
 
   const navigate = useNavigate();
 
@@ -43,10 +43,18 @@ const ProductList = () => {
       try {
         setLoading(true);
         const response = await api.get("/products");
-        setAllProducts(response.data.data || []);
+        console.log("API Response:", response.data); // Debug log
+        
+        // Handle paginated response - extract the actual products array
+        const productsData = response.data.data?.data || response.data.data || [];
+        console.log("Products Data:", productsData); // Debug log
+        console.log("Is Array?", Array.isArray(productsData)); // Debug log
+        
+        setAllProducts(Array.isArray(productsData) ? productsData : []);
       } catch (err) {
         setError("Gagal mengambil data produk. Pastikan Anda memiliki akses admin.");
         console.error(err);
+        setAllProducts([]); // Set empty array on error
       } finally {
         setLoading(false);
       }
@@ -119,11 +127,17 @@ const ProductList = () => {
   }
 
   const processedProducts = useMemo(() => {
+    // Ensure allProducts is an array before processing
+    if (!Array.isArray(allProducts)) {
+      console.warn("allProducts is not an array:", allProducts);
+      return [];
+    }
+
     let productsToProcess = [...allProducts];
 
     if (searchTerm) {
       productsToProcess = productsToProcess.filter((product) =>
-        product.name_product.toLowerCase().includes(searchTerm.toLowerCase())
+        product.name_product?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -137,12 +151,12 @@ const ProductList = () => {
     }
 
     productsToProcess.sort((a, b) => {
-      if (sortOption === "price-asc") return a.price - b.price;
-      if (sortOption === "price-desc") return b.price - a.price;
-      if (sortOption === "name-asc") return a.name_product.localeCompare(b.name_product);
-      if (sortOption === "name-desc") return b.name_product.localeCompare(a.name_product);
-      if (sortOption === "stock-asc") return a.stock - b.stock;
-      if (sortOption === "stock-desc") return b.stock - a.stock;
+      if (sortOption === "price-asc") return (a.price || 0) - (b.price || 0);
+      if (sortOption === "price-desc") return (b.price || 0) - (a.price || 0);
+      if (sortOption === "name-asc") return (a.name_product || "").localeCompare(b.name_product || "");
+      if (sortOption === "name-desc") return (b.name_product || "").localeCompare(a.name_product || "");
+      if (sortOption === "stock-asc") return (a.stock || 0) - (b.stock || 0);
+      if (sortOption === "stock-desc") return (b.stock || 0) - (a.stock || 0);
       return 0;
     });
 
@@ -194,12 +208,24 @@ const ProductList = () => {
     setFailedImages(prev => new Set(prev).add(productId));
   };
 
-  const productStats = useMemo(() => ({
-    total: allProducts.length,
-    inStock: allProducts.filter(p => p.stock > 10).length,
-    lowStock: allProducts.filter(p => p.stock > 0 && p.stock <= 10).length,
-    outOfStock: allProducts.filter(p => p.stock <= 0).length
-  }), [allProducts]);
+  const productStats = useMemo(() => {
+    // Ensure allProducts is an array before calculating stats
+    if (!Array.isArray(allProducts)) {
+      return {
+        total: 0,
+        inStock: 0,
+        lowStock: 0,
+        outOfStock: 0
+      };
+    }
+
+    return {
+      total: allProducts.length,
+      inStock: allProducts.filter(p => p.stock > 10).length,
+      lowStock: allProducts.filter(p => p.stock > 0 && p.stock <= 10).length,
+      outOfStock: allProducts.filter(p => p.stock <= 0).length
+    };
+  }, [allProducts]);
 
   const formatPrice = (price) => {
     return "Rp " + Math.round(price).toLocaleString("id-ID");

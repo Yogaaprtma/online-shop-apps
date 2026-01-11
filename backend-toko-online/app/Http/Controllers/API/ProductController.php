@@ -9,9 +9,48 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
+        $query = Product::query();
+
+        // search
+        if ($request->has('search')) {
+            $query->where('name_product', 'like', '%' . $request->search . '%');
+        }
+
+        // sort
+        if ($request->has('sort')) {
+            switch ($request->sort) {
+                case 'price-low':
+                    $query->orderBy('price', 'asc');
+                    break;
+                case 'price-high':
+                    $query->orderBy('price', 'desc');
+                    break;
+                case 'stock':
+                    $query->orderBy('stock', 'desc');
+                    break;
+                default:
+                    $query->orderBy('name_product', 'asc');
+            }
+        } 
+
+        // pagination dengan default per_page = 12, bisa diubah via parameter
+        $perPage = $request->get('per_page', 12);
+
+        // Jika per_page adalah 'all', ambil semua data tanpa pagination
+        if ($perPage === 'all') {
+            $products = $query->get();
+            return response()->json([
+                'message' => 'Produk Berhasil Diambil',
+                'data' => $products
+            ], 200);
+        }
+
+        // Validasi per_page harus berupa angka positif
+        $perPage = max(1, min(100, (int)$perPage)); // Batasi antara 1-100
+
+        $products = $query->paginate($perPage);
 
         return response()->json([
             'message' => 'Produk Berhasil Diambil',

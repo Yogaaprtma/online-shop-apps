@@ -400,8 +400,6 @@
   font-weight: 600;
 }
 
-
-
 /* Order Items */
 .order-items-list {
   border: 1px solid #eaeaea;
@@ -555,6 +553,11 @@
 .upload-note i {
   margin-right: 6px;
   color: #3498db;
+}
+
+.midtrans-button {
+  background: #6366f1;
+  color: #f3f4f6;
 }
 
 /* Responsive Design */

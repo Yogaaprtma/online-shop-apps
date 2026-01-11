@@ -26,7 +26,11 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/midtrans/notification', [OrderController::class, 'handleMidtransNotification']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', [AuthController::class, 'user']);
+    // Route::get('/user', [AuthController::class, 'user']);
+    // Profile
+    Route::get('/profile', [AuthController::class, 'user']);
+    Route::put('/profile', [AuthController::class, 'updateProfile']);
+
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/users/count', [AuthController::class, 'countUsers']);
     Route::post('/midtrans/verify', [OrderController::class, 'verify']);

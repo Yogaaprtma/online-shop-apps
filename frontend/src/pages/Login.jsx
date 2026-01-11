@@ -26,7 +26,7 @@ const Login = () => {
             localStorage.setItem("token", response.data.token);
 
             // Ambil data user untuk menentukan role
-            const userResponse = await api.get("/user");
+            const userResponse = await api.get("/profile");
             const userRole = userResponse.data.data.role;
 
             // Redirect berdasarkan role

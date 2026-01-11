@@ -18,7 +18,7 @@ const Navbar = () => {
         return;
       }
 
-      const res = await api.get("/user");
+      const res = await api.get("/profile");
       setUser(res.data.data);
     } catch (err) {
       console.error("Gagal mengambil data pengguna:", err);

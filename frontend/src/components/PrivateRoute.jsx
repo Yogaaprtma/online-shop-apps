@@ -8,7 +8,7 @@ const PrivateRoute = ({ children, role }) => {
   useEffect(() => {
     const checkRole = async () => {
       try {
-        const response = await api.get("/user"); // Endpoint untuk mendapatkan data pengguna
+        const response = await api.get("/profile"); // Endpoint untuk mendapatkan data pengguna
         const userRole = response.data.data.role;
         setIsAuthorized(userRole === role);
       } catch (err) {

@@ -50,7 +50,7 @@ const DashboardCustomer = () => {
     const fetchUser = async () => {
       try {
         console.log("Mengambil data pengguna...");
-        const response = await api.get("/user");
+        const response = await api.get("/profile");
         console.log("Data pengguna berhasil diambil:", response.data.data);
         
         // Verifikasi bahwa pengguna adalah customer
@@ -99,12 +99,19 @@ const DashboardCustomer = () => {
 
     const fetchProducts = async () => {
       try {
-        console.log("Mengambil data produk...");
-        const response = await api.get("/products");
-        console.log("Data produk berhasil diambil:", response.data.data);
-        setProducts(response.data.data);
+        console.log("Mengambil data produk untuk dashboard...");
+        const response = await api.get("/products?per_page=8");
+        console.log("Response lengkap:", response.data); 
+
+        // Handle paginated response - extract the actual products array
+        const productsData = response.data.data?.data || response.data.data || [];
+        console.log("Data produk yang diekstrak:", productsData); // Debug log
+        console.log("Apakah array?", Array.isArray(productsData)); // Debug log
+
+        setProducts(Array.isArray(productsData) ? productsData : []);
       } catch (error) {
         console.error("Gagal mengambil data produk:", error);
+        setProducts([]);
       }
     };
 

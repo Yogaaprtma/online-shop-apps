@@ -70,6 +70,34 @@ class AuthController extends Controller
         ], 200);
     }
 
+    public function updateProfile(Request $request)
+    {
+        $user = $request->user();
+
+        $validated = $request->validate([
+            'nama'      => 'required|string|max:255',
+            'email'     => 'required|email|unique:users,email,' . $user->id,
+            'no_telp'   => 'required|string|unique:users,no_telp,' . $user->id,
+            'alamat'    => 'required|string|max:500',
+            'password'  => 'nullable|string|min:6|confirmed'
+        ]);
+
+        // Jangan izinkan role diubah via payload
+        unset($validated['role']);
+
+        // Password opsional
+        if (empty($validated['password'])) {
+            unset($validated['password']);
+        }
+
+        $user->update($validated);
+
+        return response()->json([
+            'message' => 'Profile berhasil diperbarui',
+            'data' => $user->fresh()
+        ], 200);
+    }
+
     public function listUsers()
     {
         $users = User::orderBy('nama', 'asc')->get();
