@@ -89,7 +89,7 @@ const Login = () => {
                             <input 
                                 type="email" 
                                 name="email" 
-                                placeholder="Masukan Email Anda" 
+                                placeholder="Masukkan Email Anda" 
                                 onChange={handleChange} 
                                 required 
                                 className="form-input"
@@ -109,7 +109,7 @@ const Login = () => {
                             <input 
                                 type={showPassword ? "text" : "password"} 
                                 name="password" 
-                                placeholder="Masukan Password Anda" 
+                                placeholder="Masukkan Password Anda" 
                                 onChange={handleChange} 
                                 required 
                                 className="form-input"
