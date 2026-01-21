@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "/src/services/api.js";
 import "/src/styles/customer/order.css";
 
@@ -10,6 +10,7 @@ const Orders = () => {
   const [paymentFile, setPaymentFile] = useState(null);
   const [uploadLoading, setUploadLoading] = useState(false);
   const [fileName, setFileName] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -96,7 +97,6 @@ const Orders = () => {
     }
   };
 
-  // --- Label metode: gunakan payment_method jika ada; jika null, fallback ke payment_type ---
   const getPaymentLabel = (payment_method, payment_type) => {
     if (payment_method) {
       switch (payment_method) {
@@ -181,6 +181,11 @@ const Orders = () => {
 
   const formatCurrency = (amount) =>
     new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
+
+  // Fungsi untuk navigasi
+  const navigateTo = (path) => {
+    navigate(path);
+  };
 
   if (loading) {
     return (
@@ -353,11 +358,12 @@ const Orders = () => {
         </div>
       )}
 
+      {/* Bottom Navigation */}
       <div className="bottom-nav">
         <div className="bottom-nav-container">
           <button 
             className={`bottom-nav-item ${window.location.pathname === '/customer/dashboard' ? 'active' : ''}`}
-            onClick={() => navigate('/customer/dashboard')}
+            onClick={() => navigateTo('/customer/dashboard')}
           >
             <svg 
               className="bottom-nav-icon" 
@@ -377,7 +383,7 @@ const Orders = () => {
 
           <button 
             className={`bottom-nav-item ${window.location.pathname === '/customer/products' ? 'active' : ''}`}
-            onClick={() => navigate('/customer/products')}
+            onClick={() => navigateTo('/customer/products')}
           >
             <svg 
               className="bottom-nav-icon" 
@@ -398,7 +404,7 @@ const Orders = () => {
 
           <button 
             className={`bottom-nav-item ${window.location.pathname === '/customer/cart' ? 'active' : ''}`}
-            onClick={() => navigate('/customer/cart')}
+            onClick={() => navigateTo('/customer/cart')}
           >
             <svg 
               className="bottom-nav-icon" 
@@ -419,7 +425,7 @@ const Orders = () => {
 
           <button 
             className={`bottom-nav-item ${window.location.pathname === '/customer/orders' || window.location.pathname.includes('/customer/orders') ? 'active' : ''}`}
-            onClick={() => navigate('/customer/orders')}
+            onClick={() => navigateTo('/customer/orders')}
           >
             <svg 
               className="bottom-nav-icon" 
@@ -442,7 +448,7 @@ const Orders = () => {
 
           <button 
             className={`bottom-nav-item ${window.location.pathname === '/customer/profile' ? 'active' : ''}`}
-            onClick={() => navigate('/customer/profile')}
+            onClick={() => navigateTo('/customer/profile')}
           >
             <svg 
               className="bottom-nav-icon" 
